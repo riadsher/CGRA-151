@@ -13,29 +13,34 @@ class Rect {
     rect(loc.x-(Size/2), loc.y-(Size/4), Size, Size/2);
   }
 
-  
+
 
   void contact(Ball other) {
-
+    /** covers top and bottom but not the corners very well seems to slip past when one side is not with in the bounds
+    if ((top()<other.bottom() && other.top() < bottom()) && (left()<other.left() && other.right() < right())) {
+      other.move.y*=-1;
+      println("Hit on top || Hit on Bottom");
+    }
+    
     
   }
   /** this returns the top of the object**/
-  float topBounds() {
-    return loc.x;
+  float top() {
+    return loc.y-(Size/4);
   }
 
   /** this returns the bottom of the object**/
-  float bottomBounds() {
-    return loc.x+Size/2;
+  float bottom() {
+    return top() + Size/2;
   }
   /**this returns the left hand point point of the object **/
-  float leftBounds() {
-    return loc.y;
+  float left() {
+    return loc.x-(Size/2);
   }
 
   /**this returns the right hand point of the object**/
-  float rightBounds() {
-    return loc.y+Size;
+  float right() {
+    return left()+Size;
   }
 
   void update(float x, float y) {
@@ -43,12 +48,12 @@ class Rect {
     loc.y=y;
   }
 
- 
-  
-  float height(){
-            return 1.0*Size/2;
-    }
-    float width(){
-      return 1.0*Size;
-    }
+
+
+  float height() {
+    return 1.0*Size/2;
+  }
+  float width() {
+    return 1.0*Size;
+  }
 }

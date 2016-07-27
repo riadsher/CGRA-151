@@ -20,12 +20,17 @@ void draw(){
   Mouse.update(mouseX,mouseY);
   
   background(0);
+ fill(255);
+  Mouse.drawRect();
+  
   for(Ball t : balls){
+    fill(0,0,125);
   t.drawBall();
   }
-  Mouse.drawRect();
   for(Ball t : balls){
   Mouse.contact(t);
   }
+  
+   
   
 }

@@ -147,22 +147,22 @@ class Ball {
   }
   
     /** this returns the top of the object**/
-  float topBounds(){
-    return loc.x-Size/2;
+  float top(){
+    return loc.y-Size;
   }
   
   /** this returns the bottom of the object**/
-  float bottomBounds(){
-   return loc.x+Size/2; 
+  float bottom(){
+   return loc.y+Size;
   }
   /**this returns the left hand point point of the object **/
-  float leftBounds(){
-   return loc.y-Size/2; 
+  float left(){
+   return loc.x-Size; 
   }
   
   /**this returns the right hand point of the object**/
-  float rightBounds(){
-   return loc.y+Size/2; 
+  float right(){
+   return loc.x+Size; 
   }
   
   
