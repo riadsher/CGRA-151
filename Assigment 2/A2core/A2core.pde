@@ -24,6 +24,8 @@ void draw(){
   t.drawBall();
   }
   Mouse.drawRect();
-  
+  for(Ball t : balls){
+  Mouse.contact(t);
+  }
   
 }
