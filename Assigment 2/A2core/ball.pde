@@ -23,6 +23,14 @@ class Ball {
 
     return false;
   }
+  
+  boolean contact(Rect other){
+    
+    
+    
+    
+    return false;
+  }
 
 
   void move() {

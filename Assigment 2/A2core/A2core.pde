@@ -1,18 +1,29 @@
-Ball balls;
+ArrayList<Ball> balls;
+
+Rect Mouse;
+
 
 
 void setup(){
-  balls = new Ball(20,20,40,6,6,0,2.1);
+  balls = new ArrayList<Ball>();
+  balls.add(new Ball(30,10,40,3,2,0,2.1));
+  balls.add(new Ball(20,20,40,3,2,0,2.1));
+  
   size(300,600);
   frameRate(60);
-  
+ 
+  Mouse = new Rect(100,200,300);
 }
 
 
 void draw(){
-  background(0);
-  balls.drawBall();
+  Mouse.update(mouseX,mouseY);
   
+  background(0);
+  for(Ball t : balls){
+  t.drawBall();
+  }
+  Mouse.drawRect();
   
   
 }
