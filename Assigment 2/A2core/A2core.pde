@@ -6,7 +6,7 @@ Rect Mouse;
 
 void setup(){
   balls = new ArrayList<Ball>();
-  balls.add(new Ball(30,10,40,3,0,0,0));
+  balls.add(new Ball(30,10,40,3,2.5,0,2.1));
  
   
   size(300,600);

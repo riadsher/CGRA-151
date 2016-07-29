@@ -2,17 +2,15 @@ import java.awt.geom.Rectangle2D;
 
 
 class Rect {
-  
-  
-  
+
+
+
   int Size;
   PVector loc;
 
   Rect(int size, float X, float Y) {
     Size =size;
     loc = new PVector (X, Y);
-    
-    
   }
 
   void drawRect() {
@@ -23,41 +21,67 @@ class Rect {
 
 
   void contact(Ball other) {
-    Rectangle2D.Float bounds = new Rectangle2D.Float(left(),top(),width(),height());
+    Rectangle2D.Float bounds = new Rectangle2D.Float(left(), top(), width(), height());
     Rectangle2D.Float otherbounds = other.createBounds();
     /** covers top and bottom but not the corners very well seems to slip past when one side is not with in the bounds*/
-     if(bounds.intersects(otherbounds.getX(),otherbounds.getY(),otherbounds.getWidth(),otherbounds.getHeight())){
-       
-       //Top hit
-       if(bounds.contains(other.loc.x, otherbounds.getMaxY())){
-        println("hit Y max");
+    if (bounds.intersects(otherbounds.getX(), otherbounds.getY(), otherbounds.getWidth(), otherbounds.getHeight())) {
+
+      //Top hit
+      if (bounds.contains(other.loc.x, otherbounds.getMaxY())) {
+        //  println("hit Y max");
         other.move.y*=-1;
-        other.loc.y = Math.round(bounds.getY());
-       }
-       
-       //Bottom hit
-       if(bounds.contains(other.loc.x, otherbounds.getY())){
-        println("hit Y min");
+       // other.loc.y = Math.round(bounds.getY()-other.Size/2);
+      }
+
+      //Bottom hit
+      if (bounds.contains(other.loc.x, otherbounds.getY())) {
+        //println("hit Y min");
         other.move.y*=-1;
-        other.loc.y = Math.round(bounds.getMaxY());
-       }
-       //Right hit
-       if(bounds.contains(otherbounds.getX(), other.loc.y)){
-        println("hit X right");
+       // other.loc.y = Math.round(bounds.getMaxY()+other.Size/2);
+      }
+
+      //Right hit
+      if (bounds.contains(otherbounds.getX(), other.loc.y)) {
+        //println("hit X right");
         other.move.x*=-1;
-        other.loc.x = Math.round(bounds.getX());
-       }
-       
-       
-       
-     }else {
-       println("miss");
-     }
-       
-    
-    
-    
-    
+      //  other.loc.x = Math.round(bounds.getMaxX()+other.Size/2);
+      }
+
+      //Left hit
+      if (bounds.contains(otherbounds.getMaxX(), other.loc.y)) {
+        // println("hit X left");
+        other.move.x*=-1;
+      //  other.loc.x = Math.round(bounds.getX()-other.Size/2);
+      }
+      // bottom Left Hit
+      if (bounds.contains(otherbounds.getMaxX(), otherbounds.getMaxY())) {
+        // println("hit bottom left");
+        other.move.mult(-1);
+       // other.loc.x = Math.round(bounds.getX()-other.Size/2);
+     //   other.loc.y = Math.round(bounds.getMaxY()+other.Size/2);
+      }
+      // top left hit
+      if (bounds.contains(otherbounds.getX(), otherbounds.getY())) {
+        // println("hit top left");
+        other.move.mult(-1);
+      // other.loc.x = Math.round(bounds.getX()-other.Size/2);
+    //    other.loc.y = Math.round(bounds.getY()-other.Size/2);
+      }
+      //top right hit
+      if (bounds.contains(otherbounds.getX(), otherbounds.getMaxY())) {
+        //println("hit top Right");
+        other.move.mult(-1);
+      //  other.loc.x = Math.round(bounds.getMaxX()+other.Size/2);
+       // other.loc.y = Math.round(bounds.getY()-other.Size/2);
+      }
+      //bottom right hit
+      if (bounds.contains(otherbounds.getMaxX(), otherbounds.getY())) {
+        //  println("hit bottom Right");
+        other.move.mult(-1);
+      //  other.loc.x = Math.round(bounds.getMaxX()+other.Size/2);
+       // other.loc.y = Math.round(bounds.getMaxY()+other.Size/2);
+      }
+    }
   }
   /** this returns the top of the object**/
   float top() {
