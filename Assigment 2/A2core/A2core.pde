@@ -6,7 +6,7 @@ Rect Mouse;
 
 void setup(){
   balls = new ArrayList<Ball>();
-  balls.add(new Ball(30,10,40,3,2,0,2.1));
+  balls.add(new Ball(30,10,40,3,0,0,0));
  
   
   size(300,600);
@@ -26,6 +26,9 @@ void draw(){
   for(Ball t : balls){
     fill(0,0,125);
   t.drawBall();
+  stroke(255,0,0);
+  rect(Math.round(t.createBounds().getX()),Math.round(t.createBounds().getY()),Math.round(t.createBounds().getWidth()),Math.round(t.createBounds().getHeight()));
+  
   }
   for(Ball t : balls){
   Mouse.contact(t);

@@ -1,11 +1,18 @@
-class Rect {
+import java.awt.geom.Rectangle2D;
 
+
+class Rect {
+  
+  
+  
   int Size;
   PVector loc;
 
   Rect(int size, float X, float Y) {
     Size =size;
     loc = new PVector (X, Y);
+    
+    
   }
 
   void drawRect() {
@@ -16,11 +23,39 @@ class Rect {
 
 
   void contact(Ball other) {
-    /** covers top and bottom but not the corners very well seems to slip past when one side is not with in the bounds
-    if ((top()<other.bottom() && other.top() < bottom()) && (left()<other.left() && other.right() < right())) {
-      other.move.y*=-1;
-      println("Hit on top || Hit on Bottom");
-    }
+    Rectangle2D.Float bounds = new Rectangle2D.Float(left(),top(),width(),height());
+    Rectangle2D.Float otherbounds = other.createBounds();
+    /** covers top and bottom but not the corners very well seems to slip past when one side is not with in the bounds*/
+     if(bounds.intersects(otherbounds.getX(),otherbounds.getY(),otherbounds.getWidth(),otherbounds.getHeight())){
+       
+       //Top hit
+       if(bounds.contains(other.loc.x, otherbounds.getMaxY())){
+        println("hit Y max");
+        other.move.y*=-1;
+        other.loc.y = Math.round(bounds.getY());
+       }
+       
+       //Bottom hit
+       if(bounds.contains(other.loc.x, otherbounds.getY())){
+        println("hit Y min");
+        other.move.y*=-1;
+        other.loc.y = Math.round(bounds.getMaxY());
+       }
+       //Right hit
+       if(bounds.contains(otherbounds.getX(), other.loc.y)){
+        println("hit X right");
+        other.move.x*=-1;
+        other.loc.x = Math.round(bounds.getX());
+       }
+       
+       
+       
+     }else {
+       println("miss");
+     }
+       
+    
+    
     
     
   }

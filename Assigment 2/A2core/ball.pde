@@ -145,26 +145,10 @@ class Ball {
       return true;
     }
   }
+
   
-    /** this returns the top of the object**/
-  float top(){
-    return loc.y-Size;
+  Rectangle2D.Float createBounds(){
+   return new Rectangle2D.Float(loc.x-Size/2,loc.y-Size/2,Size,Size); 
   }
-  
-  /** this returns the bottom of the object**/
-  float bottom(){
-   return loc.y+Size;
-  }
-  /**this returns the left hand point point of the object **/
-  float left(){
-   return loc.x-Size; 
-  }
-  
-  /**this returns the right hand point of the object**/
-  float right(){
-   return loc.x+Size; 
-  }
-  
-  
   
 }
