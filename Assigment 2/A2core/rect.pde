@@ -28,58 +28,66 @@ class Rect {
 
       //Top hit
       if (bounds.contains(other.loc.x, otherbounds.getMaxY())) {
-        //  println("hit Y max");
+          println("hit Y max");
         other.move.y*=-1;
-       // other.loc.y = Math.round(bounds.getY()-other.Size/2);
+        other.loc.y = Math.round(bounds.getY()-other.Size/2);
+        return;
       }
 
       //Bottom hit
       if (bounds.contains(other.loc.x, otherbounds.getY())) {
-        //println("hit Y min");
+        println("hit Y min");
         other.move.y*=-1;
-       // other.loc.y = Math.round(bounds.getMaxY()+other.Size/2);
+        other.loc.y = Math.round(bounds.getMaxY()+other.Size/2);
+        return;
       }
 
       //Right hit
       if (bounds.contains(otherbounds.getX(), other.loc.y)) {
-        //println("hit X right");
+        println("hit X right");
         other.move.x*=-1;
-      //  other.loc.x = Math.round(bounds.getMaxX()+other.Size/2);
+        other.loc.x = Math.round(bounds.getMaxX()+other.Size/2);
+        return;
       }
 
       //Left hit
       if (bounds.contains(otherbounds.getMaxX(), other.loc.y)) {
-        // println("hit X left");
+         println("hit X left");
         other.move.x*=-1;
-      //  other.loc.x = Math.round(bounds.getX()-other.Size/2);
+        other.loc.x = Math.round(bounds.getX()-other.Size/2);
+        return;
       }
       // bottom Left Hit
       if (bounds.contains(otherbounds.getMaxX(), otherbounds.getMaxY())) {
-        // println("hit bottom left");
+         println("hit bottom left");
         other.move.mult(-1);
-       // other.loc.x = Math.round(bounds.getX()-other.Size/2);
-     //   other.loc.y = Math.round(bounds.getMaxY()+other.Size/2);
+        other.loc.x = Math.round(bounds.getX()-other.Size/2);
+        other.loc.y = Math.round(bounds.getMaxY()+other.Size/2);
+        return;
       }
       // top left hit
       if (bounds.contains(otherbounds.getX(), otherbounds.getY())) {
-        // println("hit top left");
+         println("hit top left");
         other.move.mult(-1);
-      // other.loc.x = Math.round(bounds.getX()-other.Size/2);
-    //    other.loc.y = Math.round(bounds.getY()-other.Size/2);
+       other.loc.x = Math.round(bounds.getX()-other.Size/2);
+        other.loc.y = Math.round(bounds.getY()-other.Size/2);
+        return;
       }
       //top right hit
       if (bounds.contains(otherbounds.getX(), otherbounds.getMaxY())) {
-        //println("hit top Right");
+        println("hit top Right");
         other.move.mult(-1);
-      //  other.loc.x = Math.round(bounds.getMaxX()+other.Size/2);
-       // other.loc.y = Math.round(bounds.getY()-other.Size/2);
+        other.loc.x = Math.round(bounds.getMaxX()+other.Size/2);
+        other.loc.y = Math.round(bounds.getY()-other.Size/2);
+        return;
       }
       //bottom right hit
       if (bounds.contains(otherbounds.getMaxX(), otherbounds.getY())) {
-        //  println("hit bottom Right");
+          println("hit bottom Right");
         other.move.mult(-1);
-      //  other.loc.x = Math.round(bounds.getMaxX()+other.Size/2);
-       // other.loc.y = Math.round(bounds.getMaxY()+other.Size/2);
+        other.loc.x = Math.round(bounds.getMaxX()+other.Size/2);
+        other.loc.y = Math.round(bounds.getMaxY()+other.Size/2);
+        return;
       }
     }
   }
