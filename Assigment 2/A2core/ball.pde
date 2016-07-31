@@ -12,7 +12,7 @@ class Ball {
 
 
   void drawBall() {
-    move();
+    
     ellipse(loc.x, loc.y, Size, Size);
   }
 
@@ -33,21 +33,14 @@ class Ball {
   }
 
 
-  void move() {
-    move= move.add(PVector.div(acc, 2));
-    loc = loc.add(move);
-
-    contactSide();
-
-    move= move.add(PVector.div(acc, 2));
-  }
+ 
 
   /** there is a reason behind teh weird layering of the if statements
    as if we put if one first we will fire off and miss case 8 and 2 and so on **/
   void contactSide() {
 
     //CASE TWO
-    if ((loc.y-Size/2)+1 < 0 && (loc.x+Size/2)+1 >width) {
+    if ((loc.y-Size/2) < 0 && (loc.x+Size/2)+1 >width) {
       //DO STUFF
       loc.y= 0+Size/2;
       loc.x = width - Size/2;
@@ -110,9 +103,9 @@ class Ball {
     }
 
     //CASE FIVE
-    if ((loc.y-Size/2)+1 > height) {
+    if ((loc.y+Size/2)+1 > height) {
       loc.y = height - Size/2;
-      
+     
       move.y*=-1;
       //DO STUFF
 
@@ -120,21 +113,12 @@ class Ball {
     }
 
     //CASE SEVEN
-    if ((loc.x - Size/2)+1 <0) {
+    if ((loc.x - Size/2) +1<0) {
       loc.x = 0+Size/2;
       
-      move.x*=-1;
       //DO  STUFF
 
       return;
-    }
-  }
-
-  boolean ContactSideX() {
-    if ((loc.x+Size/2<width && loc.x-Size/2>=0)) {
-      return false;
-    } else {
-      return true;
     }
   }
 
@@ -146,8 +130,7 @@ class Ball {
     }
   }
 
-  
-  Rectangle2D.Float createBounds(){
+   Rectangle2D.Float createBounds(){
    return new Rectangle2D.Float(loc.x-Size/2,loc.y-Size/2,Size,Size); 
   }
   

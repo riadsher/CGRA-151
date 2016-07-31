@@ -4,7 +4,7 @@ import java.awt.geom.Rectangle2D;
 class Rect {
 
 
-
+  int life =3;
   int Size;
   PVector loc;
 
@@ -26,65 +26,75 @@ class Rect {
     /** covers top and bottom but not the corners very well seems to slip past when one side is not with in the bounds*/
     if (bounds.intersects(otherbounds.getX(), otherbounds.getY(), otherbounds.getWidth(), otherbounds.getHeight())) {
 
-      //Top hit
+      //Top hit  from the rectangle
       if (bounds.contains(other.loc.x, otherbounds.getMaxY())) {
-          println("hit Y max");
+        println("hit Y max");
+
+     
         other.move.y*=-1;
         other.loc.y = Math.round(bounds.getY()-other.Size/2);
         return;
       }
 
-      //Bottom hit
+      //Bottom hit  from the rectangle
       if (bounds.contains(other.loc.x, otherbounds.getY())) {
         println("hit Y min");
+
+       
         other.move.y*=-1;
         other.loc.y = Math.round(bounds.getMaxY()+other.Size/2);
         return;
       }
 
-      //Right hit
+      //Right hit  from the rectangle
       if (bounds.contains(otherbounds.getX(), other.loc.y)) {
         println("hit X right");
+       
         other.move.x*=-1;
         other.loc.x = Math.round(bounds.getMaxX()+other.Size/2);
         return;
       }
 
-      //Left hit
+      //Left hit  from the rectangle
       if (bounds.contains(otherbounds.getMaxX(), other.loc.y)) {
-         println("hit X left");
+        println("hit X left");
+      
         other.move.x*=-1;
         other.loc.x = Math.round(bounds.getX()-other.Size/2);
         return;
-      }
-      // bottom Left Hit
-      if (bounds.contains(otherbounds.getMaxX(), otherbounds.getMaxY())) {
-         println("hit bottom left");
+      } 
+      // bottom Left Hit  from the rectangle
+      if (bounds.contains(otherbounds.getMaxX(), otherbounds.getY())) {
+        println("hit bottom Left");
         other.move.mult(-1);
+       
         other.loc.x = Math.round(bounds.getX()-other.Size/2);
         other.loc.y = Math.round(bounds.getMaxY()+other.Size/2);
         return;
       }
-      // top left hit
-      if (bounds.contains(otherbounds.getX(), otherbounds.getY())) {
-         println("hit top left");
+      // top left hit  from the rectangle
+      if (bounds.contains(otherbounds.getMaxX(), otherbounds.getMaxY())) {
+        println("hit top left");
         other.move.mult(-1);
-       other.loc.x = Math.round(bounds.getX()-other.Size/2);
+        
+        other.loc.x = Math.round(bounds.getX()-other.Size/2);
         other.loc.y = Math.round(bounds.getY()-other.Size/2);
         return;
       }
-      //top right hit
+      //top right hit  from the rectangle
       if (bounds.contains(otherbounds.getX(), otherbounds.getMaxY())) {
         println("hit top Right");
         other.move.mult(-1);
+       
         other.loc.x = Math.round(bounds.getMaxX()+other.Size/2);
         other.loc.y = Math.round(bounds.getY()-other.Size/2);
         return;
       }
-      //bottom right hit
-      if (bounds.contains(otherbounds.getMaxX(), otherbounds.getY())) {
-          println("hit bottom Right");
+      //bottom right hit from the rectangle
+      if (bounds.contains(otherbounds.getX(), otherbounds.getY())) {
+        println("hit bottom right");
         other.move.mult(-1);
+       
         other.loc.x = Math.round(bounds.getMaxX()+other.Size/2);
         other.loc.y = Math.round(bounds.getMaxY()+other.Size/2);
         return;
