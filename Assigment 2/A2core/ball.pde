@@ -115,7 +115,7 @@ class Ball {
     //CASE SEVEN
     if ((loc.x - Size/2) +1<0) {
       loc.x = 0+Size/2;
-      
+      move.x*=-1;
       //DO  STUFF
 
       return;
