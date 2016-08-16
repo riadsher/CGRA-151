@@ -45,7 +45,7 @@ void draw() {
   for (PVector p : points) {
     rect(p.x-5, p.y-5, 10, 10);
   }
-  
+  // orange line showing connections of path
   beginShape();
   for (PVector p : points) {
    vertex(p.x, p.y);

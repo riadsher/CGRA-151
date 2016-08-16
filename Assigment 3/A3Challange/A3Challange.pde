@@ -5,7 +5,7 @@
   
   // there will be three extra points which will be the first three 
   // so the thing is complete
-  int totalPoints = 4; 
+  int totalPoints = 12; 
   
   PVector clickedOn;
   
@@ -13,7 +13,7 @@
   
   void setup() {
     frameRate(60);
-    size(600, 600);
+    size(900, 900);
     points = new ArrayList<PVector>();
     cars = new ArrayList<Car>();
     Car temp = new Car();
@@ -64,18 +64,22 @@
     for (PVector p : points) {
       rect(p.x-(size+5)/2, p.y-(size+5)/2, size+5, size+5);
     }
-  
+    // orange line showing connections of path
     beginShape();
     for (PVector p : points) {
       vertex(p.x, p.y);
     }
     endShape();
+    // draws the cars
     for(Car c : cars){
      c.carDraw(); 
     }
-    for(Car c : cars){
-      for(Car k : cars){
-        if(c!=k){ // so we exclude our self since we will alwasy be collision with our self
+    // collision detections
+    for (int i=0;i<cars.size();i++){
+      Car c = cars.get(i);
+    for (int t=0;t<cars.size();t++){
+        Car k = cars.get(t);
+        if(c.ID!=k.ID && i!=t){ // so we exclude our self since we will alwasy be collision with our self
        c.detectCollision(k);
         }
       }
@@ -91,7 +95,7 @@
      cars.add(temp);
      
     }
-    int error =size+5;
+    int error =size+5; // error to give tolorince to user
     for (PVector p : points) {
       if ((mouseX < p.x+error && mouseX > p.x-error) && 
         (mouseY < p.y+error && mouseY > p.y-error)) {

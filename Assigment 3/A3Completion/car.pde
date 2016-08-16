@@ -16,8 +16,9 @@ class Car {
 
     translate(-point.x, -point.y);
     rotate(-atan2(tangent.y, tangent.x));
-
+  // increment teh posiont
     t+=speed;
+    // catch to see if you are over that segment.
     if (t>=1.0) {
       t=0.0;
       segment++;
@@ -25,7 +26,8 @@ class Car {
     }
     popMatrix();
   }
-
+  
+//changes teh speed at which the move on the line
   void changeSpeed(float amount){
     speed = speed+(0.005*amount);
     if(speed < 0.005){

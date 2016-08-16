@@ -60,12 +60,13 @@ void draw() {
   for (PVector p : points) {
     rect(p.x-(size+5)/2, p.y-(size+5)/2, size+5, size+5);
   }
-
+// orange line showing connections of path
   beginShape();
   for (PVector p : points) {
     vertex(p.x, p.y);
   }
   endShape();
+  // draws the cars
   for(Car c : cars){
    c.carDraw(); 
   }
@@ -76,7 +77,7 @@ void mousePressed() {
   if(mouseButton==RIGHT){
    cars.add(new Car()); 
   }
-  int error =size+5;
+  int error =size+5; // error to give tolorince to user
   for (PVector p : points) {
     if ((mouseX < p.x+error && mouseX > p.x-error) && 
       (mouseY < p.y+error && mouseY > p.y-error)) {
