@@ -17,8 +17,10 @@ void draw() {
   background(0);
   drawPolygon();
   drawLine(); 
-
   drawPoints();
+  
+  
+  
 }
 
 void mousePressed() {
