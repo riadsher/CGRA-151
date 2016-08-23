@@ -1,6 +1,6 @@
-PVector _poly[] ;
+PVector _poly[] ; //<>// //<>//
 PVector _line [];
-
+PVector clickedOn=null;
 
 void setup() {
   _poly = new PVector[] { 
@@ -14,21 +14,48 @@ void setup() {
 }
 
 void draw() {
+  background(0);
   drawPolygon();
   drawLine(); 
 
   drawPoints();
 }
 
+void mousePressed() {
+  int error = 20;
+  for (PVector p : _poly) {
+    if ((mouseX < p.x+error && mouseX > p.x-error) && 
+      (mouseY < p.y+error && mouseY > p.y-error)) {
+      clickedOn = p;
+    }
+  }
+   for (PVector p : _line) {
+    if ((mouseX < p.x+error && mouseX > p.x-error) && 
+      (mouseY < p.y+error && mouseY > p.y-error)) {
+      clickedOn = p;
+    }
+  }
+}
+void mouseReleased() {
+  clickedOn =null;
+}
+
+
+void mouseDragged() {
+  if (clickedOn!=null) {
+    clickedOn.x=mouseX;
+    clickedOn.y=mouseY;
+  }
+}
 void drawPoints() {
-  strokeWeight(5);
-  stroke(0, 100, 0);
+  strokeWeight(6);
+  stroke(67, 130, 64);
   beginShape(POINTS);
   for (PVector p : _poly) {
     vertex(p.x, p.y);
   }
   endShape();
-  stroke(255, 165, 0);
+  stroke(0, 94, 255);
   beginShape(POINTS);
   for (PVector l : _line) {
     vertex(l.x, l.y);
@@ -49,39 +76,10 @@ void drawPolygon() {
 void drawLine() {
   strokeWeight(3);
   stroke(255, 165, 0);
-   PVector points [] = checkOctant();
-  line(points[0].x, points[0].y, points[1].x, points[1].y);
-}
-
-
-PVector [] checkOctant(){
-  
-}
-
-PVector[] calLine(float M1X, float M1Y, float M2X, float M2Y) {
-
-  float m = (M2Y-M1Y)/(M2X-M1X);
-
-  if (Float.isInfinite(m)) {
-    m=0.0f;
-  }
-
-  float c =  M2Y-(m*M2X);
-  // y= mx+c
-  //(y-c)/m= x
-  print("m= ");
-  print(m);
-  print(" c= ");
-  println(c);
-  float x0, x1;
-
-  x0 = (0/m)-c;
-  x1 = (height/m)-c;
-
-  print("x0= ");
-  print(x0);
-  print(" x1= ");
-  println(x1);
-
-  return new PVector [] {new PVector(x0, 0), new PVector(x1, height)};
+  PVector a = _line[0];
+  PVector b = _line[1];
+  PVector D = PVector.sub(b, a);
+  PVector p1 = PVector.add(a, PVector.mult(D, -100));
+  PVector p2 = PVector.add(a, PVector.mult(D, 100));
+  line(p1.x, p1.y, p2.x, p2.y);
 }
