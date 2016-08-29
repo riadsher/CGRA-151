@@ -15,9 +15,20 @@ void setup() {
 
 void draw() {
   background(0);
-  drawPolygon();
-  drawLine(); 
-  drawPoints();
+  stroke(0, 100, 0);
+  drawPolygon(_poly);
+  drawLine();
+  stroke(67, 130, 64);
+  drawPoints(_poly);
+  stroke(0, 94, 255);
+  drawPoints(_line);
+  stroke(255,0,0);
+  noFill();
+  PVector clip[] = clipPolygon(_poly, _line);
+  drawPolygon(clip);
+  stroke(0,0,200);
+  drawPoints(clip);
+  
   
   
   
@@ -49,27 +60,22 @@ void mouseDragged() {
     clickedOn.y=mouseY;
   }
 }
-void drawPoints() {
+void drawPoints(PVector poly[]) {
   strokeWeight(6);
-  stroke(67, 130, 64);
+  
   beginShape(POINTS);
-  for (PVector p : _poly) {
+  for (PVector p : poly) {
     vertex(p.x, p.y);
   }
   endShape();
-  stroke(0, 94, 255);
-  beginShape(POINTS);
-  for (PVector l : _line) {
-    vertex(l.x, l.y);
-  }
-  endShape();
+  
 }
 
-void drawPolygon() {
+void drawPolygon(PVector poly[]) {
   strokeWeight(1);
-  stroke(0, 100, 0);
+  
   beginShape();
-  for (PVector p : _poly) {
+  for (PVector p : poly) {
     vertex(p.x, p.y);
   }
   endShape();
