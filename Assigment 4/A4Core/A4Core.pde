@@ -4,13 +4,12 @@ PVector _line [];
 PVector clickedOn=null;
 
 void setup() {
-  // weird error were tehere has to be two consecutive points on the left
+  //Polygon that you are modifing
   _poly = new PVector[] { 
     new PVector(50, 250), new PVector(150, 200), 
-    new PVector(250, 250), new PVector(150, 50), 
-    new PVector(50, 250)
+    new PVector(250, 250), new PVector(150, 50)
   };
-
+  //The Point of the Line on the screen
   _line = new PVector[] {new PVector(125, 150)};
   size(300, 300);
 }
@@ -19,25 +18,30 @@ void draw() {
   background(0);
   stroke(0, 100, 0);
   noFill();
+  // drawing the polygon that is not modifide
   drawPolygon(_poly);
+  //drawing the cut line
   drawLine();
   stroke(67, 130, 64);
+  //drawing the Points for the polygon
   drawPoints(_poly);
   stroke(0, 94, 255);
+  //drawing the points for the line.
   drawPoints(_line);
   stroke(255,0,0);
   fill(255,0,0,50);
+  // creating the clipped Polygon
   PVector clip[] = clipPolygon(_poly, new PVector [] {
+    // creating the line from the point same as the line..
     new PVector(_line[0].x,_line[0].y+50),
     new PVector(_line[0].x,_line[0].y-50)
   }
   );
+  // drawing the clipped polygon
   drawPolygon(clip);
   stroke(0,0,200);
+  //drawing the clipped polygons points
   drawPoints(clip);
-  
-  
-  
   
 }
 
@@ -67,6 +71,7 @@ void mouseDragged() {
     clickedOn.y=mouseY;
   }
 }
+//Draws the points of a Polygon
 void drawPoints(PVector poly[]) {
   strokeWeight(6);
   
@@ -78,6 +83,7 @@ void drawPoints(PVector poly[]) {
   
 }
 
+//Draws the polygon
 void drawPolygon(PVector poly[]) {
   strokeWeight(1);
   
@@ -88,6 +94,7 @@ void drawPolygon(PVector poly[]) {
   endShape(CLOSE);
 }
 
+//draws the cut line
 void drawLine() {
   strokeWeight(3);
   stroke(255, 165, 0);
