@@ -1,4 +1,4 @@
- //<>// //<>// //<>//
+
 float ks;
 float ke;
 
@@ -12,15 +12,21 @@ PVector [] clipPolygon(PVector poly[], PVector line []) {
 
     float t =intersects(p1, p2, line);
     if ( !Float.isNaN(t) && (0 <= t && t <= 1)) {
-       //list.add(p1); // weird error is in this case here!!! 
-      list.add(new PVector((1-t)*p1.x+t*p2.x, (1-t)*p1.y+t*p2.y));
+      if (ks>0) {
+        list.add(
+        new PVector((1-intersects(poly[(i-1)%poly.length], p1, line))*poly[(i+1)%poly.length].x+t*p1.x, 
+        (1-intersects(poly[(i-1)%poly.length], p1, line))*poly[(i+1)%poly.length].y+t*p1.y));
+      }
+      if (ke>0) {
+        list.add(new PVector((1-t)*p1.x+t*p2.x, (1-t)*p1.y+t*p2.y));
+      }
     } else {
       if ((ks >0.0 && ke >0.0)) {
-           if(i != 0){
+        if (i != 0) {
           list.add(
-          new PVector((1-intersects(poly[(i-1)%poly.length], p1, line))*poly[(i+1)%poly.length].x+t*p1.x,
+          new PVector((1-intersects(poly[(i-1)%poly.length], p1, line))*poly[(i+1)%poly.length].x+t*p1.x, 
           (1-intersects(poly[(i-1)%poly.length], p1, line))*poly[(i+1)%poly.length].y+t*p1.y));
-           }
+        }
         list.add(new PVector((1-t)*p1.x+t*p2.x, (1-t)*p1.y+t*p2.y));
       } else {
         list.add(p1);
@@ -49,3 +55,4 @@ float intersects (PVector s, PVector e, PVector Line[]) {
 
   return t;
 }
+

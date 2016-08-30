@@ -1,4 +1,5 @@
-PVector _poly[] ;  //<>//
+
+PVector _poly[] ;
 PVector _line [];
 PVector clickedOn=null;
 
