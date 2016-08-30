@@ -3,6 +3,7 @@ PVector _line [];
 PVector clickedOn=null;
 
 void setup() {
+  // weird error were tehere has to be two consecutive points on the left
   _poly = new PVector[] { 
     new PVector(50, 250), new PVector(150, 200), 
     new PVector(250, 250), new PVector(150, 50), 
