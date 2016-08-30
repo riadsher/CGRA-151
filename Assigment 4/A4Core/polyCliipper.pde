@@ -6,19 +6,21 @@ PVector [] clipPolygon(PVector poly[], PVector line []) {
 
   ArrayList<PVector> list = new ArrayList<PVector>();
 
-  for (int i =0; i< poly.length+1; i++) {
+  for (int i =0; i< poly.length; i++) {
     PVector p1 = poly[i%poly.length];
     PVector p2 = poly[(i+1)%poly.length];
 
     float t =intersects(p1, p2, line);
     if ( !Float.isNaN(t) && (0 <= t && t <= 1)) {
-      // list.add(p1);
+       //list.add(p1); // weird error is in this case here!!! 
       list.add(new PVector((1-t)*p1.x+t*p2.x, (1-t)*p1.y+t*p2.y));
     } else {
       if ((ks >0.0 && ke >0.0)) {
-        if (i != 0) {
-          list.add(list.get(list.size()-1));
-        }
+           if(i != 0){
+          list.add(
+          new PVector((1-intersects(poly[(i-1)%poly.length], p1, line))*poly[(i+1)%poly.length].x+t*p1.x,
+          (1-intersects(poly[(i-1)%poly.length], p1, line))*poly[(i+1)%poly.length].y+t*p1.y));
+           }
         list.add(new PVector((1-t)*p1.x+t*p2.x, (1-t)*p1.y+t*p2.y));
       } else {
         list.add(p1);
