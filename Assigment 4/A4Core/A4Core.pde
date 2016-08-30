@@ -1,4 +1,4 @@
-PVector _poly[] ; //<>// //<>//
+PVector _poly[] ;  //<>//
 PVector _line [];
 PVector clickedOn=null;
 
@@ -9,13 +9,14 @@ void setup() {
     new PVector(50, 250)
   };
 
-  _line = new PVector[] {new PVector(225, 50), new PVector(225, 250)};
+  _line = new PVector[] {new PVector(125, 150)};
   size(300, 300);
 }
 
 void draw() {
   background(0);
   stroke(0, 100, 0);
+  noFill();
   drawPolygon(_poly);
   drawLine();
   stroke(67, 130, 64);
@@ -23,8 +24,12 @@ void draw() {
   stroke(0, 94, 255);
   drawPoints(_line);
   stroke(255,0,0);
-  noFill();
-  PVector clip[] = clipPolygon(_poly, _line);
+  fill(255,0,0,50);
+  PVector clip[] = clipPolygon(_poly, new PVector [] {
+    new PVector(_line[0].x,_line[0].y+50),
+    new PVector(_line[0].x,_line[0].y-50)
+  }
+  );
   drawPolygon(clip);
   stroke(0,0,200);
   drawPoints(clip);
@@ -78,14 +83,14 @@ void drawPolygon(PVector poly[]) {
   for (PVector p : poly) {
     vertex(p.x, p.y);
   }
-  endShape();
+  endShape(CLOSE);
 }
 
 void drawLine() {
   strokeWeight(3);
   stroke(255, 165, 0);
-  PVector a = _line[0];
-  PVector b = _line[1];
+  PVector a = new PVector(_line[0].x,_line[0].y+50);
+  PVector b = new PVector(_line[0].x,_line[0].y-50);
   PVector D = PVector.sub(b, a);
   PVector p1 = PVector.add(a, PVector.mult(D, -100));
   PVector p2 = PVector.add(a, PVector.mult(D, 100));
