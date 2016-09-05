@@ -10,7 +10,7 @@ void setup() {
     new PVector(250, 250), new PVector(150, 50)
   };
   //The Point of the Line on the screen
-  _line = new PVector[] {new PVector(250, 50),new PVector(50,250 )};
+  _line = new PVector[] {new PVector(50,50), new PVector(50,250 ),new PVector(200,200),new PVector(200, 50)};
   size(300, 300);
 }
 
@@ -21,10 +21,11 @@ void draw() {
   // drawing the polygon that is not modifide
   drawPolygon(_poly);
   //drawing the cut line
-  drawVerticalLine(_line[0]);
-  drawHorizontalLine(_line[0]);
-    drawVerticalLine(_line[1]);
-  drawHorizontalLine(_line[1]);
+  drawVerticalLine(_line[0],_line[1]);
+  drawVerticalLine(_line[1],_line[2]);
+  drawVerticalLine(_line[2],_line[3]);
+  drawVerticalLine(_line[3],_line[0]);
+ 
   stroke(67, 130, 64);
   //drawing the Points for the polygon
   drawPoints(_poly);
@@ -32,39 +33,7 @@ void draw() {
   stroke(255,0,0);
   fill(255,0,0,50);
   // creating the clipped Polygon starting with teh right side
-  PVector clip[]= clipPolygon(_poly, new PVector [] {
-    // creating the line from the point same as the line..
-    new PVector(_line[0].x,_line[0].y+100),
-    new PVector(_line[0].x,_line[0].y-100)
-  }, true
-  );
-  if(clip[0] !=null){
-  //doign the top
-  clip = clipPolygon(clip, new PVector [] { //<>//
-    // creating the line from the point same as the line..
-    new PVector(_line[0].x-100,_line[0].y),
-    new PVector(_line[0].x+100,_line[0].y)
-  },false
-  );
-  }
-  if(clip[0] !=null){
-  //doing the left side
-   clip = clipPolygon(clip, new PVector [] { //<>//
-    // creating the line from the point same as the line..
-    new PVector(_line[1].x,_line[1].y-100),
-    new PVector(_line[1].x,_line[1].y+100)
-  },true
-  );
-  }
-  if(clip[0] !=null){
-  //doing teh bottom
-   clip = clipPolygon(clip, new PVector [] { //<>//
-    // creating the line from the point same as the line..
-    new PVector(_line[1].x+100,_line[1].y),
-    new PVector(_line[1].x-100,_line[1].y)
-  },false
-  );
-  }
+  PVector clip[]= ClipPolySetup(); //<>// //<>// //<>//
   if(clip[0] !=null){
   // drawing the clipped polygon
   drawPolygon(clip);
@@ -78,6 +47,40 @@ void draw() {
   //drawing the points for the line.
   drawPoints(_line);
   
+}
+
+PVector [] ClipPolySetup(){
+  // new PVector[] {new PVector(250, 50), new PVector(250,250), new PVector(50,50),new PVector(50,250 )};
+  PVector clip[] =clipPolygon(_poly, new PVector [] {
+    // creating the line from the point same as the line..
+    _line[0],_line[1]
+  }, true
+  );
+  if(clip[0] !=null){
+  //doign the top
+  clip = clipPolygon(clip, new PVector [] {
+    // creating the line from the point same as the line..
+    _line[1],_line[2]
+  },false
+  );
+  }
+  if(clip[0] !=null){
+  //doing the left side
+   clip = clipPolygon(clip, new PVector [] {
+    // creating the line from the point same as the line..
+   _line[2],_line[3]
+  },true
+  );
+  }
+  if(clip[0] !=null){
+  //doing teh bottom
+   clip = clipPolygon(clip, new PVector [] {
+    // creating the line from the point same as the line..
+   _line[3],_line[0]
+  },false
+  );
+  }
+return clip;
 }
 
 void mousePressed() {
@@ -129,26 +132,13 @@ void drawPolygon(PVector poly[]) {
   endShape(CLOSE);
 }
 
-//draws vertical cut line
-void drawVerticalLine(PVector point) {
+//draws a cut line
+void drawVerticalLine(PVector a,PVector b) {
   strokeWeight(3);
   stroke(255, 165, 0);
-  PVector a = new PVector(point.x,point.y+100);
-  PVector b = new PVector(point.x,point.y-100);
+  
   PVector D = PVector.sub(b, a);
-  PVector p1 = PVector.add(a, PVector.mult(D, -100));
-  PVector p2 = PVector.add(a, PVector.mult(D, 100));
-  line(p1.x, p1.y, p2.x, p2.y);
-}
-
-//draws the cut line
-void drawHorizontalLine(PVector point) {
-  strokeWeight(3);
-  stroke(255, 165, 0);
-  PVector a = new PVector(point.x-100,point.y);
-  PVector b = new PVector(point.x+100,point.y);
-  PVector D = PVector.sub(b, a);
-  PVector p1 = PVector.add(a, PVector.mult(D, -100));
-  PVector p2 = PVector.add(a, PVector.mult(D, 100));
+  PVector p1 = PVector.add(a, PVector.mult(D, 0));
+  PVector p2 = PVector.add(a, PVector.mult(D, 1));
   line(p1.x, p1.y, p2.x, p2.y);
 }
