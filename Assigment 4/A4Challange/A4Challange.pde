@@ -10,7 +10,7 @@ void setup() {
     new PVector(250, 250), new PVector(150, 50)
   };
   //The Point of the Line on the screen
-  _line = new PVector[] {new PVector(50,50), new PVector(50,250 ),new PVector(200,200),new PVector(200, 50)};
+  _line = new PVector[] {new PVector(60,50), new PVector(60,225 ),new PVector(200,200),new PVector(200, 50)};
   size(300, 300);
 }
 
@@ -33,7 +33,7 @@ void draw() {
   stroke(255,0,0);
   fill(255,0,0,50);
   // creating the clipped Polygon starting with teh right side
-  PVector clip[]= ClipPolySetup(); //<>// //<>// //<>//
+  PVector clip[]= ClipPolySetup(); //<>// //<>//
   if(clip[0] !=null){
   // drawing the clipped polygon
   drawPolygon(clip);
@@ -56,30 +56,30 @@ PVector [] ClipPolySetup(){
     _line[0],_line[1]
   }, true
   );
-  if(clip[0] !=null){
-  //doign the top
-  clip = clipPolygon(clip, new PVector [] {
-    // creating the line from the point same as the line..
-    _line[1],_line[2]
-  },false
-  );
-  }
-  if(clip[0] !=null){
-  //doing the left side
-   clip = clipPolygon(clip, new PVector [] {
-    // creating the line from the point same as the line..
-   _line[2],_line[3]
-  },true
-  );
-  }
-  if(clip[0] !=null){
-  //doing teh bottom
-   clip = clipPolygon(clip, new PVector [] {
-    // creating the line from the point same as the line..
-   _line[3],_line[0]
-  },false
-  );
-  }
+  //if(clip[0] !=null){
+  ////doign the top
+  //clip = clipPolygon(clip, new PVector [] {
+  //  // creating the line from the point same as the line..
+  //  _line[1],_line[2]
+  //},false
+  //);
+  //}
+  //if(clip[0] !=null){
+  ////doing the left side
+  // clip = clipPolygon(clip, new PVector [] {
+  //  // creating the line from the point same as the line..
+  // _line[2],_line[3]
+  //},true
+  //);
+  //}
+  //if(clip[0] !=null){
+  ////doing teh bottom
+  // clip = clipPolygon(clip, new PVector [] {
+  //  // creating the line from the point same as the line..
+  // _line[3],_line[0]
+  //},false
+  //);
+  //}
 return clip;
 }
 
