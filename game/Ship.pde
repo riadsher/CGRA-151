@@ -1,60 +1,72 @@
-class ship{
- 
+class ship {
+
   PVector loc;
-  PVector speed = new PVector(0,0);
+  PVector speed = new PVector(0, 0);
   float ang;
   float mag;
-  
-  
-  ship(PVector location, float angle,float spe){
+
+
+  ship(PVector location, float angle, float spe) {
     loc=location;
-    ang =angle;
     chaSpeed(spe);
-    turn(ang);
+    turn(angle);
   }
-    
-   void shipDraw(){
-     strokeWeight(2);
-     stroke(255);
-     noFill();
-     pushMatrix();
-       
-     translate(loc.x,loc.y);
-     rotate(PI/2+ang);
-     beginShape();
-     vertex(0,-25);
-     vertex(10,10);
-     vertex(0,0);
-     vertex(-10,10);
-     endShape(CLOSE);
-     popMatrix();
-     
-     
-   }
-  
-  PVector fire(){
-    
-   return PVector.fromAngle(ang); 
+
+  void Draw() {
+    strokeWeight(2);
+    stroke(255);
+    noFill();
+    pushMatrix();
+
+    translate(loc.x, loc.y);
+    rotate(PI/2+ang);
+    beginShape();
+    vertex(0, -25);
+    vertex(10, 10);
+    vertex(0, 0);
+    vertex(-10, 10);
+    endShape(CLOSE);
+    popMatrix();
   }
-  
-  void move(){
+
+  bullet fire() {
+    PVector bultLoc = PVector.add(loc, PVector.fromAngle(ang).mult(25));
+    return new bullet(bultLoc,ang,6.0);
+  }
+
+  void move() {
     //loc = loc.add(speed);
-    loc.x =(loc.x+speed.x)%width;
+    loc.x =(loc.x+speed.x)%(width+10);
     loc.y =(loc.y+speed.y)%(height+25);
-    
-    if(loc.x<-10)loc.x=width;
-    if(loc.y<-25)loc.y=(height+25);
-  
+
+    if (loc.x<-10)loc.x=width+10;
+    if (loc.y<-25)loc.y=(height+25);
   }
-  
-   void turn(float angle){
+
+  void turn(float angle) {
     ang = angle;
-    //speed = PVector.fromAngle(ang).mult(mag);
-  }
-  
-  void chaSpeed(float spe){
+    }
+
+  void chaSpeed(float spe) {
     mag = spe;
-    speed = PVector.add(speed,PVector.fromAngle(ang).mult(mag));
+    speed = PVector.add(speed, PVector.fromAngle(ang).mult(mag));
   }
   
+  boolean Collison(Polygon2D other) {
+
+    Polygon2D poly = getPolygon();
+    Area otherArea = new Area(other);
+    Area area = new Area(poly);
+    area.intersect(otherArea);
+    return !area.isEmpty();
+  }
+
+  Polygon2D getPolygon() {
+    Polygon2D poly = new Polygon2D(); 
+    poly.addPoint(0, -25);
+    poly.addPoint(10, 10);
+    poly.addPoint(0, 0);
+    poly.addPoint(-10, 10);
+    return poly;
+  }
 }
