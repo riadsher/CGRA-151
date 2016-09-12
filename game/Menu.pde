@@ -11,7 +11,7 @@ class Menu {
     Title = loadFont("Stencil-100.vlw");
   }
 
-  void Draw() {
+  void DrawMenu() {
     if (Score) {
     } else {
       textFont(Title, 100);
@@ -37,6 +37,12 @@ class Menu {
         text(" Exit", width/2-130, 440);
       }
     }
+  }
+  
+  void DrawScore(){
+    
+    
+    
   }
 
   void down() {

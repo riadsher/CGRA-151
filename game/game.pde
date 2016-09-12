@@ -48,7 +48,7 @@ void draw() {
     p.Draw();
   }
   if (menu) {
-    Menu.Draw();
+    Menu.DrawMenu();
   } else if (!PlayerDead) {
 
     player.move();

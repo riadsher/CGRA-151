@@ -63,10 +63,10 @@ class ship {
 
   Polygon2D getPolygon() {
     Polygon2D poly = new Polygon2D(); 
-    poly.addPoint(0, -25);
-    poly.addPoint(10, 10);
-    poly.addPoint(0, 0);
-    poly.addPoint(-10, 10);
+    poly.addPoint(loc.x+0, loc.y+(-25));
+    poly.addPoint(loc.x+10, loc.y+10);
+    poly.addPoint(loc.x+0, loc.y+0);
+    poly.addPoint(loc.x+(-10),loc.y+-10);
     return poly;
   }
 }
