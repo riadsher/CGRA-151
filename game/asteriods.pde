@@ -21,7 +21,7 @@ class asteriods {
     chaSpeed(speed);
     turn(angle);
     defineShape();
-    colour=new PVector(random(255), random(255), random(255));
+    colour=new PVector(random(50,255), random(50,255), random(50,255));
   }
 
   void defineShape() {

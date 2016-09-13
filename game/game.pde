@@ -7,7 +7,8 @@ Menu Menu;
 keys keys = new keys(); 
 ship player;
 
-
+long score=0;
+int timer=0;
 int lastFire=0;
 
 boolean PlayerDead = false;
@@ -27,7 +28,10 @@ void setup() {
 void setupAsteriods() {
   one.clear();
   for (int i = 0; i<10; i++)
-    one.add(new asteriods(20, new PVector(random(width), random(height)), random(2*PI), random(0.5, 3)));
+    one.add(new asteriods(20, new PVector(random(3*width/4,width), random(0,height)), random(2*PI), random(0.5, 3)));
+    one.add(new asteriods(20, new PVector(random(0,width/4), random(0,height)), random(2*PI), random(0.5, 3)));
+    one.add(new asteriods(20, new PVector(random(0,width), random(3*height/4,height)), random(2*PI), random(0.5, 3)));
+    one.add(new asteriods(20, new PVector(random(0,width), random(0,height/4)), random(2*PI), random(0.5, 3)));
 }
 
 
@@ -49,8 +53,21 @@ void draw() {
   }
   if (menu) {
     Menu.DrawMenu();
-  } else if (!PlayerDead) {
+  } else if (one.isEmpty()) {
+    if (millis()-timer>2500) {
+      setupAsteriods();
+    }
 
+    Menu.DrawScorePanel();
+    Menu.NextLevel();
+
+    player.Draw();
+    player.move();
+    player.speed=new PVector(0, 0);
+    player.loc= new PVector(width/2, height/2);
+    player.ang=-PI/2;
+  } else if (!PlayerDead) {
+    Menu.DrawScorePanel();
     player.move();
     player.Draw();
 
@@ -72,21 +89,25 @@ void contacts() {
       if ((!bulletRemove.contains(a))&&p.getPolygon().contains(a.loc.x, a.loc.y)) {
         bulletRemove.add(a);
         add.addAll(p.hit());
-
         remove.add(p);
+        score=score +Math.round(p.size);
       }
     }
   }
 
   for (asteriods p : one) {
     if (player.Collison(p.getPolygon())) {
-      PlayerDead= true;
+      // PlayerDead= true;
     }
   }
 
   bullets.removeAll(bulletRemove);
   one.removeAll(remove);
   one.addAll(add);
+
+  if (one.isEmpty()) {
+    timer = millis();
+  }
 }
 
 void checkKeys() {
@@ -139,7 +160,7 @@ void keyPressed() {
         player = new ship(new PVector(width/2, height/2), -PI/2, 0);
         menu = false;
       } else if (Menu.select==1) {
-        // Menu.Score();
+        Menu.Score=true;
       } else if (Menu.select==2) {
         System.exit(0);
       }
@@ -151,6 +172,18 @@ void keyPressed() {
     PlayerDead = false;
     menu = true;
     setupAsteriods();
+  }
+
+  if (key=='b') {
+    if (menu && Menu.Score) {
+      Menu.Score=false;
+    } else if (!menu) {
+      menu = true;
+    }
+  }
+  if(key=='p'){
+   one.clear(); 
+     timer = millis();
   }
 }
 

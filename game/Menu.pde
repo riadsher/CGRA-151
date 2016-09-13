@@ -10,9 +10,24 @@ class Menu {
 
     Title = loadFont("Stencil-100.vlw");
   }
+  void DrawScorePanel(){
+    textFont(Title,50);
+    fill(255);
+    text("Score: "+score,width/2,50);
+    
+  }
+  
+  void NextLevel(){
+    
+    textFont(Title,50);
+    fill(255,255,153);
+    text("Flying to\nnext sector",width/2,height/2);
+  }
+
 
   void DrawMenu() {
     if (Score) {
+      DrawScore();
     } else {
       textFont(Title, 100);
       fill(255);
@@ -53,6 +68,7 @@ class Menu {
   void up() {
     select--; 
     if (select<0)select=2;
-    selected=selection[select];
+    
+    selected=selection[select%3];
   }
 }
