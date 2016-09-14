@@ -7,7 +7,7 @@ class ship {
 
   int lastFire=0;
   
-  int laserBlast =0;
+  int laserBlast =5000;
   boolean laser=false; 
 
   ship(PVector location, float angle, float spe) {
@@ -38,7 +38,7 @@ class ship {
       PVector bultLoc = PVector.add(loc, PVector.fromAngle(ang).mult(25));
 
       lastFire=millis();
-      return new bullet(bultLoc, ang, 6.0);
+      return new bullet(bultLoc, ang, 8.0);
     } else {
       return null;
     }
@@ -58,8 +58,15 @@ class ship {
   }
 
   void chaSpeed(float spe) {
+    
     mag = spe;
+        
     speed = PVector.add(speed, PVector.fromAngle(ang).mult(mag));
+    
+    if(speed.mag()>5){
+     speed.normalize();
+     speed.mult(2);
+    }
   }
 
   boolean Collison(Polygon2D other) {
@@ -83,7 +90,7 @@ class ship {
 
 
   void FireLASER() {
-    
+   
     if (laserBlast>0) {
       if(!laser){
         lastFire = millis();
@@ -101,6 +108,12 @@ class ship {
        player.laserBlast =player.laserBlast - millis()-player.lastFire; //<>//
         
       }
+    }
+  }
+  
+  void addBonus(char p){
+    if (p == 'L' ){
+      laserBlast+=5000;
     }
   }
 }
