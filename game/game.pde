@@ -2,6 +2,9 @@ import java.awt.event.KeyEvent; //<>// //<>//
 
 ArrayList<asteriods> one = new ArrayList<asteriods>();
 ArrayList<bullet> bullets = new ArrayList<bullet>();
+ArrayList<Bonus> bonus = new ArrayList<Bonus>();
+
+
 Menu Menu;
 
 keys keys = new keys(); 
@@ -9,7 +12,7 @@ ship player;
 
 long score=0;
 int timer=0;
-int lastFire=0;
+
 
 boolean PlayerDead = false;
 
@@ -28,18 +31,18 @@ void setup() {
 void setupAsteriods() {
   one.clear();
   for (int i = 0; i<10; i++)
-    one.add(new asteriods(20, new PVector(random(3*width/4,width), random(0,height)), random(2*PI), random(0.5, 3)));
-    one.add(new asteriods(20, new PVector(random(0,width/4), random(0,height)), random(2*PI), random(0.5, 3)));
-    one.add(new asteriods(20, new PVector(random(0,width), random(3*height/4,height)), random(2*PI), random(0.5, 3)));
-    one.add(new asteriods(20, new PVector(random(0,width), random(0,height/4)), random(2*PI), random(0.5, 3)));
+    one.add(new asteriods(20, new PVector(random(3*width/4, width), random(0, height)), random(2*PI), random(0.5, 3)));
+  one.add(new asteriods(20, new PVector(random(0, width/4), random(0, height)), random(2*PI), random(0.5, 3)));
+  one.add(new asteriods(20, new PVector(random(0, width), random(3*height/4, height)), random(2*PI), random(0.5, 3)));
+  one.add(new asteriods(20, new PVector(random(0, width), random(0, height/4)), random(2*PI), random(0.5, 3)));
 }
 
 
 void draw() {
-  checkKeys();
+
 
   background(0);
-
+  checkKeys();
   if (!bullets.isEmpty()) {
     for (bullet b : bullets) {
       b.move();
@@ -112,10 +115,10 @@ void contacts() {
 
 void checkKeys() {
   if (keys.space()) { 
-    if ((millis()-lastFire)>100) {
-      bullets.add(player.fire());
-      lastFire=millis();
-    }
+
+    bullet shot = player.fire();
+    if (shot != null)
+      bullets.add(shot);
   }
   if (keys.down()) {
     player.chaSpeed(-0.5);
@@ -124,11 +127,42 @@ void checkKeys() {
     player.chaSpeed(+0.5);
   }
   if (keys.left()) {
-    player.turn(radians(degrees(player.ang)-5));
+    player.turn(radians(degrees(player.ang)-3));
   }
   if (keys.right()) {
-    player.turn(radians(degrees(player.ang)+5));
+    player.turn(radians(degrees(player.ang)+3));
   }
+  if (keys.L()) {
+    player.FireLASER();
+    if(player.laser){
+    checkLASER(player.ang);
+    }
+  }
+}
+
+void checkLASER(float ang) {
+  ArrayList<asteriods> add = new ArrayList<asteriods>();
+  ArrayList<asteriods> remove = new ArrayList<asteriods>();
+  PVector a = new PVector(player.loc.x, player.loc.y);
+  PVector b = PVector.add(a,PVector.fromAngle(ang).mult(1));
+  PVector D = PVector.sub(b, a);
+  for (float t = 0.0; t<1000.0; t+=1) {
+    
+    PVector p1 = PVector.add(a, PVector.mult(D, t));
+    //point(p1.x,p1.y);
+    for (asteriods p : one) { 
+      if ((!remove.contains(p))&&p.getPolygon().contains(p1.x, p1.y)) {
+
+        add.addAll(p.hit());
+        remove.add(p);
+        score=score +Math.round(p.size);
+      }
+    }
+     
+  }
+ 
+  one.removeAll(remove);
+     one.addAll(add);
 }
 
 void keyPressed() {
@@ -181,9 +215,12 @@ void keyPressed() {
       menu = true;
     }
   }
-  if(key=='p'){
-   one.clear(); 
-     timer = millis();
+  if (key=='p') {
+    one.clear(); 
+    timer = millis();
+  }
+  if (key=='l') {
+    keys.LPressed();
   }
 }
 
@@ -204,5 +241,10 @@ void keyReleased() {
   }
   if (key==' ') {
     keys.spaceReleased();
+  }
+  if (key=='l') {
+    keys.LReleased();
+    player.laserBlast =player.laserBlast - (millis()-player.lastFire);
+    player.lastFire=millis();
   }
 }

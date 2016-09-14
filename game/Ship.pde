@@ -5,6 +5,10 @@ class ship {
   float ang;
   float mag;
 
+  int lastFire=0;
+  
+  int laserBlast =0;
+  boolean laser=false; 
 
   ship(PVector location, float angle, float spe) {
     loc=location;
@@ -30,8 +34,14 @@ class ship {
   }
 
   bullet fire() {
-    PVector bultLoc = PVector.add(loc, PVector.fromAngle(ang).mult(25));
-    return new bullet(bultLoc,ang,6.0);
+    if (!laser&&(millis()-lastFire)>100) {
+      PVector bultLoc = PVector.add(loc, PVector.fromAngle(ang).mult(25));
+
+      lastFire=millis();
+      return new bullet(bultLoc, ang, 6.0);
+    } else {
+      return null;
+    }
   }
 
   void move() {
@@ -45,13 +55,13 @@ class ship {
 
   void turn(float angle) {
     ang = angle;
-    }
+  }
 
   void chaSpeed(float spe) {
     mag = spe;
     speed = PVector.add(speed, PVector.fromAngle(ang).mult(mag));
   }
-  
+
   boolean Collison(Polygon2D other) {
 
     Polygon2D poly = getPolygon();
@@ -66,7 +76,31 @@ class ship {
     poly.addPoint(loc.x+0, loc.y+(-25));
     poly.addPoint(loc.x+10, loc.y+10);
     poly.addPoint(loc.x+0, loc.y+0);
-    poly.addPoint(loc.x+(-10),loc.y+-10);
+    poly.addPoint(loc.x+(-10), loc.y+-10);
     return poly;
+  }
+
+
+
+  void FireLASER() {
+    
+    if (laserBlast>0) {
+      if(!laser){
+        lastFire = millis();
+      }
+      laser =true;
+      strokeWeight(5);
+      stroke(255);
+      pushMatrix();
+      translate(loc.x, loc.y);
+      rotate(PI/2+ang);
+      line(0, -28, 0, -height);
+      popMatrix();
+      if(millis()-lastFire>laserBlast){
+       laser=false;
+       player.laserBlast =player.laserBlast - millis()-player.lastFire; //<>//
+        
+      }
+    }
   }
 }
