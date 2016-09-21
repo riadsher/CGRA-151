@@ -12,6 +12,17 @@ class asteriods {
   float size;
   float mag;
   float angle;
+  boolean Dead = false;
+  void printdata(){
+    println("\nBeginning");
+   print("center: "+center+" Colour: "+colour+" speed: "+speed+ " size: "+size);
+   println();
+   println("Shape");
+   for(PVector s:shape){
+    print(" "+s+" ,");
+   }
+   
+  }
 
   asteriods(float s, PVector center, float angle, float speed) {
     this.center = center;
@@ -89,6 +100,12 @@ class asteriods {
 
     beginShape();
     for (PVector p : shape) {
+       if(p.x<(-5000.0) ){
+        Dead= true;
+      }
+      if(p.y<(-5000.0) ){
+        Dead= true;
+      }
       vertex(p.x, p.y);
     }
     endShape(CLOSE);
@@ -97,9 +114,6 @@ class asteriods {
   void Move() {
     center.x =(center.x+speed.x);
     center.y =(center.y+speed.y);
-
-    //if (center.x<-size)center.x=(width+size);
-    //if (center.y<-size)center.y=(height+size);
 
     boolean over=false;
     boolean under = false;
@@ -181,8 +195,14 @@ class asteriods {
     ArrayList<asteriods> babys  = new ArrayList<asteriods>();
     if (size>5) {
       for (int i =0; i< size/10; i++) {
-          babys.add(new asteriods(size-5, new PVector(random(Math.round(bounds.getMinX()), Math.round(bounds.getMaxX())), 
+        if((size-5)<5){
+           babys.add(new asteriods(5, new PVector(random(Math.round(bounds.getMinX()), Math.round(bounds.getMaxX())),
+           random(Math.round(bounds.getMinY()), Math.round(bounds.getMaxY())) ), random(2*PI), random(mag, 2*mag)));
+        }else{
+          babys.add(new asteriods(size-5, new PVector(random(Math.round(bounds.getMinX()), Math.round(bounds.getMaxX())),
           random(Math.round(bounds.getMinY()), Math.round(bounds.getMaxY())) ), random(2*PI), random(mag, 2*mag)));
+        }
+          
       }
     }
 

@@ -28,6 +28,10 @@ class keys {
   boolean L(){
    return keys[5]; 
   }
+  
+  boolean K(){
+   return keys[6]; 
+  }
 
   void spacePressed() {
     keys[0]=true;
@@ -49,6 +53,10 @@ class keys {
    keys[5]=true; 
   }
   
+  void KPressed(){
+   keys[6]=true; 
+  }
+  
     void spaceReleased() {
     keys[0]=false;
   }
@@ -67,6 +75,10 @@ class keys {
   
   void LReleased(){
    keys[5] = false; 
+  }
+  
+  void KReleased(){
+   keys[6] =false; 
   }
   
 }

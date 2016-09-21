@@ -7,7 +7,7 @@ class ship {
 
   int lastFire=0;
   
-  int laserBlast =5000;
+  int laserBlast =1000000000;
   boolean laser=false; 
 
   ship(PVector location, float angle, float spe) {
@@ -90,7 +90,7 @@ class ship {
 
 
   void FireLASER() {
-   
+   //println(laserBlast);
     if (laserBlast>0) {
       if(!laser){
         lastFire = millis();
@@ -101,12 +101,11 @@ class ship {
       pushMatrix();
       translate(loc.x, loc.y);
       rotate(PI/2+ang);
-      line(0, -28, 0, -height);
+      line(0, -28, 0, -2*height);
       popMatrix();
       if(millis()-lastFire>laserBlast){
        laser=false;
-       player.laserBlast =player.laserBlast - millis()-player.lastFire; //<>//
-        
+       laserBlast=0;         //<>//
       }
     }
   }
