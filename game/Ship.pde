@@ -1,4 +1,4 @@
-class ship {
+class ship { //<>//
 
   PVector loc;
   PVector speed = new PVector(0, 0);
@@ -6,8 +6,10 @@ class ship {
   float mag;
 
   int lastFire=0;
-  
-  int laserBlast =1000000000;
+
+  int laserBlast =5000;
+  int ClusterBomb = 3;
+
   boolean laser=false; 
 
   ship(PVector location, float angle, float spe) {
@@ -58,14 +60,14 @@ class ship {
   }
 
   void chaSpeed(float spe) {
-    
+
     mag = spe;
-        
+
     speed = PVector.add(speed, PVector.fromAngle(ang).mult(mag));
-    
-    if(speed.mag()>5){
-     speed.normalize();
-     speed.mult(2);
+
+    if (speed.mag()>5) {
+      speed.normalize();
+      speed.mult(2);
     }
   }
 
@@ -87,12 +89,10 @@ class ship {
     return poly;
   }
 
-
-
   void FireLASER() {
-   //println(laserBlast);
+    //println(laserBlast);
     if (laserBlast>0) {
-      if(!laser){
+      if (!laser) {
         lastFire = millis();
       }
       laser =true;
@@ -100,19 +100,61 @@ class ship {
       stroke(255);
       pushMatrix();
       translate(loc.x, loc.y);
-      rotate(PI/2+ang);
+      rotate(HALF_PI+ang);
       line(0, -28, 0, -2*height);
       popMatrix();
-      if(millis()-lastFire>laserBlast){
-       laser=false;
-       laserBlast=0;         //<>//
+      if (millis()-lastFire>laserBlast) {
+        laser=false;
+        laserBlast=0;
       }
     }
   }
-  
-  void addBonus(char p){
-    if (p == 'L' ){
-      laserBlast+=5000;
+
+  Cluster DropBomb() {
+    if ((millis()-lastFire)>100) {
+      PVector bultLoc = PVector.add(loc, PVector.fromAngle(ang).mult(25));
+      ClusterBomb--;
+      lastFire=millis();
+      return new Cluster(bultLoc, ang, 8.0, 20);
+    } else {
+      return null;
     }
+  }
+
+  void addBonus(char p) {
+    if (p == 'L' ) {
+      laserBlast+=5000;
+    } else if (p=='C') {
+      ClusterBomb+=3;
+    }
+  }
+
+
+  int lastFrame=0;
+  int index =0;
+
+  void fireWave() {
+    translate(loc.x, loc.y);
+    rotate(ang+HALF_PI);
+    
+    stroke(255);
+    
+    float totalStep = 40;
+    float step = QUARTER_PI/totalStep;
+    float rand = 10;
+    
+    for (int K=0; K<totalStep; K++) {
+      float xt = 0 + (index*rand)*(cos(QUARTER_PI+(step*K)));
+      float yt = 0 - (index*rand)*(sin(QUARTER_PI+(step*K)));
+      point( xt, yt);
+      xt = 0 + (index*rand)*(cos(HALF_PI+(step*K)));
+      yt = 0 - (index*rand)*(sin(HALF_PI+(step*K)));
+      point( xt, yt);
+    }
+    if (millis()-lastFrame>250) {
+      lastFrame = millis();
+      index = (index +1)%20;
+    }
+    
   }
 }

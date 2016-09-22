@@ -7,13 +7,12 @@ class Menu {
   boolean Score = false;
 
   Menu() {
-
     Title = loadFont("Stencil-100.vlw");
   }
   void DrawScorePanel(){
     textFont(Title,50);
     fill(255);
-    text("Score: "+score,width/2,50);
+    text("Level: "+level+" Score: "+score,width/2,50);
     
   }
   

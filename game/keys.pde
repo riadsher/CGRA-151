@@ -25,12 +25,20 @@ class keys {
     return keys[4];
   }
   
-  boolean L(){
+  boolean A(){
    return keys[5]; 
   }
   
-  boolean K(){
+  boolean S(){
    return keys[6]; 
+  }
+  
+  boolean W(){
+   return keys[7]; 
+  }
+  
+  boolean D(){
+   return keys[8]; 
   }
 
   void spacePressed() {
@@ -49,15 +57,23 @@ class keys {
     keys[4]=true;
   }
   
-  void LPressed(){
+  void APressed(){
    keys[5]=true; 
   }
   
-  void KPressed(){
+  void SPressed(){
    keys[6]=true; 
   }
   
-    void spaceReleased() {
+  void WPressed(){
+   keys[7]=true; 
+  }
+  
+  void DPressed(){
+   keys[8]=true; 
+  }
+  
+  void spaceReleased() {
     keys[0]=false;
   }
   void leftReleased() {
@@ -73,12 +89,20 @@ class keys {
     keys[4]=false;
   }
   
-  void LReleased(){
+  void AReleased(){
    keys[5] = false; 
   }
   
-  void KReleased(){
+  void SReleased(){
    keys[6] =false; 
+  }
+  
+  void WReleased(){
+   keys[7] = false; 
+  }
+  
+  void DReleased(){
+    keys[8] = false;
   }
   
 }

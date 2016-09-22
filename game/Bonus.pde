@@ -11,7 +11,7 @@ class Bonus{
   
   char current;
   
-  char type[] = new char[] {'L','T','F'};
+  char type[] = new char[] {'L','C','W'};
   
   
   
@@ -19,7 +19,7 @@ class Bonus{
     timeCreated=millis();
     this.loc = loc;
     font =  loadFont("Stencil-100.vlw");
-    current = type[0];
+    current = type[1];//Math.round(random(2))];
   }
   
   void Draw(){

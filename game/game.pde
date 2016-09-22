@@ -1,4 +1,4 @@
-//import java.awt.event.KeyEvent; //<>// //<>//
+ //<>// //<>//
 
 ArrayList<asteriods> one = new ArrayList<asteriods>();
 ArrayList<bullet> bullets = new ArrayList<bullet>();
@@ -16,7 +16,7 @@ int timer=0;
 int level = 1;
 
 boolean PlayerDead = false;
-
+boolean fireWave = true;
 boolean menu = true;
 
 
@@ -27,22 +27,25 @@ void setup() {
   generateBonusTable();
   bonus.add(new Bonus(new PVector(width/2, height/2))); 
   frameRate(60);
+  // keys.leftPressed();
+  // keys.APressed();
 }
 
 void generateBonusTable() {
   //bonus.clear();
   int number =Math.round(random(level*3));
   bonusLevel = new int [number];
-  long max = totalScore -100;
+  long max = totalScore;
   long min = score;
   for (int i=0; i< number; i++) {
-    bonusLevel[i]= Math.round(random(min, max)); //<>//
+    bonusLevel[i]= Math.round(random(min, max));
   }
   println(bonusLevel);
 }
 void setupAsteriods() {
   one.clear();
   totalScore =score;
+
   for (int i = 0; i<2; i++) {
 
     asteriods temp= new asteriods(random(15, 20+level), new PVector(random(3*width/4, width), random(0, height)), random(2*PI), random(0.5, 3)); 
@@ -67,12 +70,12 @@ void draw() {
   checkBonus();
 
   background(0);
-
+  checkKeys();
   for (Bonus b : bonus) {
     b.Draw();
     b.move();
   }
-  checkKeys();
+
   if (!bullets.isEmpty()) {
     for (bullet b : bullets) {
       b.move();
@@ -103,8 +106,11 @@ void draw() {
     Menu.DrawScorePanel();
     player.move();
     player.Draw();
-
+    if(fireWave){
+    player.fireWave();  
+    }
     contacts();
+    
   }
 }
 
@@ -125,8 +131,10 @@ void checkBonus() {
 
 
 void contacts() {
+
   ArrayList<asteriods> add = new ArrayList<asteriods>();
   ArrayList<asteriods> remove = new ArrayList<asteriods>();
+  ArrayList<bullet> bulletAdd = new ArrayList<bullet>();
   ArrayList<bullet> bulletRemove = new ArrayList<bullet>();
 
   for (bullet a : bullets) {
@@ -134,19 +142,27 @@ void contacts() {
       bulletRemove.add(a);
     }
     for (asteriods p : one) {
-      if (p.Dead) {
-        println("Death to one");
-        remove.add(p);
-      }
+
 
       if ((!bulletRemove.contains(a))&&p.getPolygon().contains(a.loc.x, a.loc.y)) {
-        bulletRemove.add(a);
-        add.addAll(p.hit());
-        remove.add(p);
-        score=score +Math.round(p.size);
+        if (a.type=='N') {
+          bulletRemove.add(a);
+          add.addAll(p.hit());
+          remove.add(p);
+          score=score +Math.round(p.size);
+        } else if (a.type == 'C') {
+          bulletRemove.add(a);
+          Cluster temp = (Cluster) a;
+          ArrayList<bullet> test = temp.blast();
+          bulletAdd.addAll(test);
+          add.addAll(p.hit());
+          remove.add(p);
+          score=score +Math.round(p.size);
+        }
       }
     }
   }
+
   ArrayList<Bonus> removed = new ArrayList<Bonus>();
   for (Bonus b : bonus) {
     if (!b.bounds()) {
@@ -158,14 +174,20 @@ void contacts() {
       removed.add(b);
     }
   }
+
   bonus.removeAll(removed);
 
   for (asteriods p : one) {
+    if (p.Dead) {
+      println("Death to one");
+      remove.add(p);
+    }
     if (player.Collison(p.getPolygon())) {
       //PlayerDead= true;
     }
   }
 
+  bullets.addAll(bulletAdd);
   bullets.removeAll(bulletRemove);
   one.removeAll(remove);
   one.addAll(add);
@@ -175,17 +197,18 @@ void contacts() {
     player.speed=new PVector(0, 0);
     player.loc= new PVector(width/2, height/2);
     player.ang=-PI/2;
+    player.move();
   }
 }
 
 void checkKeys() {
 
-  if (keys.space() || keys.K()) { 
-  if(player !=null){
-    bullet shot = player.fire();
-    if (shot != null)
-      bullets.add(shot);
-  }
+  if (keys.space() || keys.S()) { 
+    if (player !=null) {
+      bullet shot = player.fire();
+      if (shot != null)
+        bullets.add(shot);
+    }
   }
   if (keys.down()) {
     player.chaSpeed(-0.5);
@@ -194,23 +217,38 @@ void checkKeys() {
     player.chaSpeed(+0.5);
   }
   if (keys.left()) {
-
-    player.turn(radians(degrees(player.ang)+(-3)));
+    if (player != null) {
+      player.turn(radians(degrees(player.ang)+(-3)));
+    }
   }
   if (keys.right()) {
-    player.turn(radians(degrees(player.ang)+3));
+    if (player != null) {
+      player.turn(radians(degrees(player.ang)+3));
+    }
   }
-  if (keys.L()) {
-    if(player != null){
-    player.FireLASER();
-    if (player.laser) {
-      checkLASER(player.ang);
+  if (keys.A()) {
+    if (player != null) {
+      player.FireLASER();
+      if (player.laser) {
+        checkLASER(player.ang);
+      }
     }
+  }
+  if (keys.W()) {
+    if (player != null && player.ClusterBomb>0) {
+      bullet temp = player.DropBomb();
+      if (temp != null) {
+        bullets.add(temp);
+      }
     }
+  }
+  if(keys.D()){
+    //fireWave=true;
   }
 }
 
 void checkLASER(float ang) {
+
   ArrayList<asteriods> add = new ArrayList<asteriods>();
   ArrayList<asteriods> remove = new ArrayList<asteriods>();
   PVector a = new PVector(player.loc.x, player.loc.y);
@@ -233,6 +271,8 @@ void checkLASER(float ang) {
   one.removeAll(remove);
   one.addAll(add);
 }
+
+
 
 void keyPressed() {
 
@@ -285,11 +325,17 @@ void keyPressed() {
   } else if (key=='p') {
     one.clear(); 
     timer = millis();
-  } else if (key=='l') {
-    keys.LPressed();
-  } else if (key=='k') {
-    keys.KPressed();
-  } else if (key =='t') {
+  } else if (key=='a') {
+    keys.APressed();
+  } else if (key=='s') {
+    keys.SPressed();
+  } else if (key=='w') {
+    keys.WPressed();
+  } else if (key=='d'){
+     player.lastFrame= millis();
+    fireWave=true;
+   keys.DPressed(); 
+  }else if (key =='t') {
     test();
   } else if (key=='y') {
     for (asteriods o : one) {
@@ -312,17 +358,23 @@ void keyReleased() {
   }
   if (key==' ') {
     keys.spaceReleased();
-  } else if (key=='l') {
-    if(player!=null){
-    keys.LReleased();
-    if (player.laser) {
-      player.laserBlast =player.laserBlast - (millis()-player.lastFire);
-      player.lastFire=millis();
-      player.laser=false;
+  } else if (key=='a') {
+    if (player!=null) {
+      keys.AReleased();
+      if (player.laser) {
+        player.laserBlast =player.laserBlast - (millis()-player.lastFire);
+        player.lastFire=millis();
+        player.laser=false;
+      }
     }
-    }
-  } else if ( key=='k') {
-    keys.KReleased();
+  } else if ( key=='s') {
+    keys.SReleased();
+  } else if (key=='w') {
+    keys.WReleased();
+  }else if (key=='d'){
+    fireWave= false;
+   
+    keys.DReleased();
   }
 }
 

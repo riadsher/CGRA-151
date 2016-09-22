@@ -739,7 +739,7 @@ class Polyline2D implements Shape, Cloneable, Serializable {
    * This method is required to implement the Shape interface,
    * but in the case of Line2D objects it always returns false since a line contains no area.
    */
-  public boolean contains(int x, int y) {
+  public boolean contains(int x, int yy) {
     return false;
   }
 

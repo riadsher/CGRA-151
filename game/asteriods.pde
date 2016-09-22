@@ -16,6 +16,7 @@ class asteriods {
   void printdata(){
     println("\nBeginning");
    print("center: "+center+" Colour: "+colour+" speed: "+speed+ " size: "+size);
+   print(" Dead: "+Dead);
    println();
    println("Shape");
    for(PVector s:shape){
@@ -100,13 +101,13 @@ class asteriods {
 
     beginShape();
     for (PVector p : shape) {
-       if(p.x<(-5000.0) ){
+      if(p.x<(-10000.00) ){
         Dead= true;
-      }
-      if(p.y<(-5000.0) ){
+      }else if(p.y<(-10000.00) ){
         Dead= true;
-      }
+      }else{
       vertex(p.x, p.y);
+    }
     }
     endShape(CLOSE);
   }
