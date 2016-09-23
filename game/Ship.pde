@@ -5,6 +5,8 @@ class ship { //<>//
   float ang;
   float mag;
 
+  ArrayList<ArrayList<PVector>> points; 
+
   int lastFire=0;
 
   int laserBlast =5000;
@@ -16,6 +18,9 @@ class ship { //<>//
     loc=location;
     chaSpeed(spe);
     turn(angle);
+
+    points = new ArrayList<ArrayList<PVector>>() ;
+    genPoints();
   }
 
   void Draw() {
@@ -136,25 +141,40 @@ class ship { //<>//
   void fireWave() {
     translate(loc.x, loc.y);
     rotate(ang+HALF_PI);
-    
+
     stroke(255);
-    
-    float totalStep = 40;
-    float step = QUARTER_PI/totalStep;
-    float rand = 10;
-    
-    for (int K=0; K<totalStep; K++) {
-      float xt = 0 + (index*rand)*(cos(QUARTER_PI+(step*K)));
-      float yt = 0 - (index*rand)*(sin(QUARTER_PI+(step*K)));
-      point( xt, yt);
-      xt = 0 + (index*rand)*(cos(HALF_PI+(step*K)));
-      yt = 0 - (index*rand)*(sin(HALF_PI+(step*K)));
-      point( xt, yt);
+    ArrayList<PVector> temp = points.get(index);
+    for(PVector p: temp){
+     point(p.x,p.y); 
     }
-    if (millis()-lastFrame>250) {
+    
+    if (millis()-lastFrame>100) {
       lastFrame = millis();
-      index = (index +1)%20;
+      index = (index +1);
     }
-    
+  }
+
+  void genPoints() {
+
+    int ind =0;
+    for (ind=0; ind<20; ind++) {
+      float totalStep = 40;
+      float step = QUARTER_PI/totalStep;
+      float rand = 10;
+      ArrayList<PVector> temp = new ArrayList<PVector>();
+      for (int K=0; K<totalStep; K++) {
+        float xt = 0 + (ind*rand)*(cos(QUARTER_PI+(step*K)));
+        float yt = 0 - (ind*rand)*(sin(QUARTER_PI+(step*K)));
+        temp.add(new PVector(xt, yt));
+        xt = 0 + (ind*rand)*(cos(HALF_PI+(step*K)));
+        yt = 0 - (ind*rand)*(sin(HALF_PI+(step*K)));
+        temp.add(new PVector(xt, yt));
+      } 
+      points.add(temp);
+    }
+  }
+  
+  ArrayList<PVector> waveHit(){
+   return points.get(index); 
   }
 }

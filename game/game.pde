@@ -1,4 +1,4 @@
- //<>// //<>//
+//<>// //<>//
 
 ArrayList<asteriods> one = new ArrayList<asteriods>();
 ArrayList<bullet> bullets = new ArrayList<bullet>();
@@ -16,7 +16,7 @@ int timer=0;
 int level = 1;
 
 boolean PlayerDead = false;
-boolean fireWave = true;
+boolean fireWave = false;
 boolean menu = true;
 
 
@@ -106,11 +106,14 @@ void draw() {
     Menu.DrawScorePanel();
     player.move();
     player.Draw();
-    if(fireWave){
-    player.fireWave();  
+    if (fireWave) {
+      player.fireWave();
+      if (player.index==20) {
+        fireWave=false;
+        player.index=0;
+      }
     }
     contacts();
-    
   }
 }
 
@@ -242,7 +245,7 @@ void checkKeys() {
       }
     }
   }
-  if(keys.D()){
+  if (keys.D()) {
     //fireWave=true;
   }
 }
@@ -331,11 +334,11 @@ void keyPressed() {
     keys.SPressed();
   } else if (key=='w') {
     keys.WPressed();
-  } else if (key=='d'){
-     player.lastFrame= millis();
+  } else if (key=='d') {
+    player.lastFrame= millis();
     fireWave=true;
-   keys.DPressed(); 
-  }else if (key =='t') {
+    keys.DPressed();
+  } else if (key =='t') {
     test();
   } else if (key=='y') {
     for (asteriods o : one) {
@@ -371,9 +374,9 @@ void keyReleased() {
     keys.SReleased();
   } else if (key=='w') {
     keys.WReleased();
-  }else if (key=='d'){
-    fireWave= false;
-   
+  } else if (key=='d') {
+    //fireWave= false;
+
     keys.DReleased();
   }
 }
