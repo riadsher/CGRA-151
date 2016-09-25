@@ -78,8 +78,17 @@ void draw() {
 
   if (!bullets.isEmpty()) {
     for (bullet b : bullets) {
-      b.move();
-      b.Draw();
+      if (b.type=='W') {
+        Wave temp = (Wave) b;
+        if (fireWave) {
+          if (temp.index>=(temp.points.size())) {
+            fireWave=false;
+            temp.index=0;
+          }
+          b.move();
+          b.Draw();
+        }
+      }
     }
   }
 
@@ -106,13 +115,7 @@ void draw() {
     Menu.DrawScorePanel();
     player.move();
     player.Draw();
-    if (fireWave) {
-      player.fireWave();
-      if (player.index==20) {
-        fireWave=false;
-        player.index=0;
-      }
-    }
+
     contacts();
   }
 }
@@ -145,13 +148,28 @@ void contacts() {
       bulletRemove.add(a);
     }
     for (asteriods p : one) {
-
-
-      if ((!bulletRemove.contains(a))&&p.getPolygon().contains(a.loc.x, a.loc.y)) {
+      if (a.type=='W') {
+        Wave temp = (Wave) a;
+        if(temp.DEAD){
+         bulletRemove.add(temp);
+         
+         fireWave=false;
+        }
+        for (PVector point : temp.waveHit()) {
+          if (!p.Dead&&p.getPolygon().contains(point.x, point.y)) {
+            p.Dead=true;
+            add.addAll(p.hit());
+            remove.add(p);
+            score=score +Math.round(p.size);
+          }
+        }
+      } else if (!p.Dead&&(!bulletRemove.contains(a))&&p.getPolygon().contains(a.loc.x, a.loc.y)) {
+        
         if (a.type=='N') {
           bulletRemove.add(a);
           add.addAll(p.hit());
           remove.add(p);
+          p.Dead=true;
           score=score +Math.round(p.size);
         } else if (a.type == 'C') {
           bulletRemove.add(a);
@@ -160,6 +178,7 @@ void contacts() {
           bulletAdd.addAll(test);
           add.addAll(p.hit());
           remove.add(p);
+          p.Dead=true;
           score=score +Math.round(p.size);
         }
       }
@@ -182,7 +201,6 @@ void contacts() {
 
   for (asteriods p : one) {
     if (p.Dead) {
-      println("Death to one");
       remove.add(p);
     }
     if (player.Collison(p.getPolygon())) {
@@ -263,7 +281,6 @@ void checkLASER(float ang) {
     //point(p1.x,p1.y);
     for (asteriods p : one) { 
       if ((!remove.contains(p))&&p.getPolygon().contains(p1.x, p1.y)) {
-
         add.addAll(p.hit());
         remove.add(p);
         score=score +Math.round(p.size);
@@ -335,8 +352,18 @@ void keyPressed() {
   } else if (key=='w') {
     keys.WPressed();
   } else if (key=='d') {
-    player.lastFrame= millis();
-    fireWave=true;
+    if (!fireWave) {
+      Wave temp = player.FireWave();
+      if (temp != null) {
+        bullets.add(temp );
+        fireWave=true;
+      } else {
+        fireWave=false;
+      }
+    } else {
+      println("no fire "+fireWave);
+    }
+
     keys.DPressed();
   } else if (key =='t') {
     test();

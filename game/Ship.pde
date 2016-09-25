@@ -5,10 +5,10 @@ class ship { //<>//
   float ang;
   float mag;
 
-  ArrayList<ArrayList<PVector>> points; 
+
 
   int lastFire=0;
-
+  int Wave = 1;
   int laserBlast =5000;
   int ClusterBomb = 3;
 
@@ -18,9 +18,6 @@ class ship { //<>//
     loc=location;
     chaSpeed(spe);
     turn(angle);
-
-    points = new ArrayList<ArrayList<PVector>>() ;
-    genPoints();
   }
 
   void Draw() {
@@ -46,6 +43,27 @@ class ship { //<>//
 
       lastFire=millis();
       return new bullet(bultLoc, ang, 8.0);
+    } else {
+      return null;
+    }
+  }
+
+  Cluster DropBomb() {
+    if ((millis()-lastFire)>100) {
+      PVector bultLoc = PVector.add(loc, PVector.fromAngle(ang).mult(25));
+      ClusterBomb--;
+      lastFire=millis();
+      return new Cluster(bultLoc, ang, 8.0, 20);
+    } else {
+      return null;
+    }
+  }
+
+  Wave FireWave() {
+    if ((millis()-lastFire)>100) {
+      PVector bultLoc = PVector.add(loc, PVector.fromAngle(ang).mult(25));
+      Wave--;
+      return new Wave(bultLoc, ang, 8.0);
     } else {
       return null;
     }
@@ -115,16 +133,7 @@ class ship { //<>//
     }
   }
 
-  Cluster DropBomb() {
-    if ((millis()-lastFire)>100) {
-      PVector bultLoc = PVector.add(loc, PVector.fromAngle(ang).mult(25));
-      ClusterBomb--;
-      lastFire=millis();
-      return new Cluster(bultLoc, ang, 8.0, 20);
-    } else {
-      return null;
-    }
-  }
+
 
   void addBonus(char p) {
     if (p == 'L' ) {
@@ -132,49 +141,5 @@ class ship { //<>//
     } else if (p=='C') {
       ClusterBomb+=3;
     }
-  }
-
-
-  int lastFrame=0;
-  int index =0;
-
-  void fireWave() {
-    translate(loc.x, loc.y);
-    rotate(ang+HALF_PI);
-
-    stroke(255);
-    ArrayList<PVector> temp = points.get(index);
-    for(PVector p: temp){
-     point(p.x,p.y); 
-    }
-    
-    if (millis()-lastFrame>100) {
-      lastFrame = millis();
-      index = (index +1);
-    }
-  }
-
-  void genPoints() {
-
-    int ind =0;
-    for (ind=0; ind<20; ind++) {
-      float totalStep = 40;
-      float step = QUARTER_PI/totalStep;
-      float rand = 10;
-      ArrayList<PVector> temp = new ArrayList<PVector>();
-      for (int K=0; K<totalStep; K++) {
-        float xt = 0 + (ind*rand)*(cos(QUARTER_PI+(step*K)));
-        float yt = 0 - (ind*rand)*(sin(QUARTER_PI+(step*K)));
-        temp.add(new PVector(xt, yt));
-        xt = 0 + (ind*rand)*(cos(HALF_PI+(step*K)));
-        yt = 0 - (ind*rand)*(sin(HALF_PI+(step*K)));
-        temp.add(new PVector(xt, yt));
-      } 
-      points.add(temp);
-    }
-  }
-  
-  ArrayList<PVector> waveHit(){
-   return points.get(index); 
   }
 }

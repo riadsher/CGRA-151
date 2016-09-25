@@ -13,6 +13,7 @@ class asteriods {
   float mag;
   float angle;
   boolean Dead = false;
+  
   void printdata(){
     println("\nBeginning");
    print("center: "+center+" Colour: "+colour+" speed: "+speed+ " size: "+size);
