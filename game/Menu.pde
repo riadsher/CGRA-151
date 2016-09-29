@@ -58,6 +58,12 @@ class Menu {
     
     
   }
+  
+  void PlayerDead(){
+    textFont(Title,50);
+    fill(255,255,153);
+    text("You Are Dead\nHit N for\na new Game.",width/2,height/2);
+  }
 
   void down() {
     select++;

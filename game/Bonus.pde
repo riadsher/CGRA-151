@@ -11,7 +11,7 @@ class Bonus{
   
   char current;
   
-  char type[] = new char[] {'L','C','W'};
+  char type[] = new char[] {'A','W','D'};
   
   
   

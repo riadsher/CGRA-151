@@ -2,17 +2,24 @@ class bullet {
 
   PVector speed= new PVector(0, 0), loc;
   float angle, mag; 
-  char type ='N';
+  char type ='S';
 
 
   bullet(PVector loc, float angle, float mag) {
-
+    type ='S';
+    this.loc=loc; 
+    turn(angle);
+    chaSpeed(mag);
+  }
+  bullet(PVector loc, float angle, float mag,char Type) {
+    type =Type;
     this.loc=loc; 
     turn(angle);
     chaSpeed(mag);
   }
 
   void Draw() {
+    stroke(255);
     ellipse(loc.x, loc.y, 5, 5);
   }
   void move() {
@@ -42,12 +49,13 @@ class Cluster extends bullet {
 
   int SIZE;
   Cluster(PVector loc, float angle, float mag, int size) {
-    super(loc, angle, mag);
-    type='C';
+    super(loc, angle, mag,'W');
+    //type='W';
     SIZE=size;
   }
 
   void Draw() {
+    stroke(4);
     fill(125, 0, 0);
     ellipse(loc.x, loc.y, 20, 20);
   }
@@ -82,8 +90,8 @@ class Wave extends bullet {
   boolean DEAD=false;
 
   Wave(PVector loc, float angle, float mag) {
-    super(loc, angle, mag);
-    type='W';
+    super(loc, angle, mag,'D');
+    //type='D';
     points = new ArrayList<ArrayList<PVector>>() ;
     genPoints();
   }
@@ -114,11 +122,11 @@ class Wave extends bullet {
 
   void genPoints() {
 
-    float ind =0;
-    for (ind=0; ind<10; ind+=0.5) {
-      float totalStep = 20;
+    float ind =0; // the length of the steep
+    for (ind=0; ind<4; ind+=1.0) {
+      float totalStep = 30;
       float step = QUARTER_PI/totalStep;
-      float rand = 30;
+      float rand = 30; // defines the width of the wave
       ArrayList<PVector> temp = new ArrayList<PVector>();
       for (int K=0; K<totalStep; K++) {
         float xt = 0 + (ind*rand)*(cos(QUARTER_PI+(step*K)));
@@ -135,7 +143,10 @@ class Wave extends bullet {
   ArrayList<PVector> waveHit() {
     ArrayList<PVector> temp = new ArrayList<PVector>();
     for(PVector p : points.get(index%points.size())){
-     temp.add(new PVector(loc.x+p.x,loc.y+p.y)); 
+     PVector t = new PVector(p.x,p.y);
+     t.rotate(angle+HALF_PI);
+      t.add(loc);
+     temp.add(t); 
       
     }
     return temp;

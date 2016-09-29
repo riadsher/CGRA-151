@@ -38,9 +38,10 @@ class ship { //<>//
   }
 
   bullet fire() {
+      
     if (!laser&&(millis()-lastFire)>100) {
+      println("Fire");
       PVector bultLoc = PVector.add(loc, PVector.fromAngle(ang).mult(25));
-
       lastFire=millis();
       return new bullet(bultLoc, ang, 8.0);
     } else {
@@ -49,6 +50,7 @@ class ship { //<>//
   }
 
   Cluster DropBomb() {
+    println("Cluster");
     if ((millis()-lastFire)>100) {
       PVector bultLoc = PVector.add(loc, PVector.fromAngle(ang).mult(25));
       ClusterBomb--;
@@ -136,10 +138,12 @@ class ship { //<>//
 
 
   void addBonus(char p) {
-    if (p == 'L' ) {
+    if (p == 'A' ) {
       laserBlast+=5000;
-    } else if (p=='C') {
+    } else if (p=='W') {
       ClusterBomb+=3;
+    } else if (p=='D') {
+      Wave+=1;
     }
   }
 }

@@ -36,7 +36,7 @@ void generateBonusTable() {
   int number =Math.round(random(level*3));
   bonusLevel = new int [number];
   long max = totalScore;
-  long min = score;
+  long min = score+1;
   for (int i=0; i< number; i++) {
     bonusLevel[i]= Math.round(random(min, max));
   }
@@ -78,15 +78,22 @@ void draw() {
 
   if (!bullets.isEmpty()) {
     for (bullet b : bullets) {
-      if (b.type=='W') {
-        Wave temp = (Wave) b;
-        if (fireWave) {
-          if (temp.index>=(temp.points.size())) {
-            fireWave=false;
-            temp.index=0;
-          }
-          b.move();
+      if (!(b.type=='D')) {
+        b.move();
           b.Draw();
+      }else if(b.type=='D') {
+        Wave temp = (Wave) b;
+        print("fireWave: "+fireWave);
+         print(" index: "+temp.index+" ,temp size: "+temp.points.size());
+          println(" Dead: "+temp.DEAD);
+        if (fireWave) {
+          print(" index: "+temp.index+" ,temp size: "+temp.points.size());
+          println(" Dead: "+temp.DEAD);
+          if (temp.index==(temp.points.size())) {
+            fireWave=false;
+          }
+          temp.move();
+          temp.Draw();
         }
       }
     }
@@ -99,7 +106,9 @@ void draw() {
   }
   if (menu) {
     Menu.DrawMenu();
-  } else if (one.isEmpty()) {
+  }else if(PlayerDead){ 
+  Menu.PlayerDead();
+  }else if (one.isEmpty()) {
 
     if (millis()-timer>2500) {
       level++;
@@ -116,8 +125,10 @@ void draw() {
     player.move();
     player.Draw();
 
-    contacts();
+    
   }
+  if(player!=null)
+  contacts();
 }
 
 void checkBonus() {
@@ -148,14 +159,20 @@ void contacts() {
       bulletRemove.add(a);
     }
     for (asteriods p : one) {
-      if (a.type=='W') {
+      //println("its gone");
+      if (a.type=='D') {
+        //println("its gone");
         Wave temp = (Wave) a;
         if(temp.DEAD){
-         bulletRemove.add(temp);
+         println("its gone");
+         bulletRemove.add(a);
+      
          
          fireWave=false;
         }
         for (PVector point : temp.waveHit()) {
+           stroke(255,0,0);
+           point(point.x,point.y);
           if (!p.Dead&&p.getPolygon().contains(point.x, point.y)) {
             p.Dead=true;
             add.addAll(p.hit());
@@ -165,13 +182,14 @@ void contacts() {
         }
       } else if (!p.Dead&&(!bulletRemove.contains(a))&&p.getPolygon().contains(a.loc.x, a.loc.y)) {
         
-        if (a.type=='N') {
+        if (a.type=='S') {
+          println("normal check");
           bulletRemove.add(a);
           add.addAll(p.hit());
           remove.add(p);
           p.Dead=true;
           score=score +Math.round(p.size);
-        } else if (a.type == 'C') {
+        } else if (a.type == 'W') {
           bulletRemove.add(a);
           Cluster temp = (Cluster) a;
           ArrayList<bullet> test = temp.blast();
@@ -264,7 +282,15 @@ void checkKeys() {
     }
   }
   if (keys.D()) {
-    //fireWave=true;
+    if (!fireWave) {
+      Wave temp = player.FireWave();
+      if (temp != null) {
+        bullets.add(temp );
+        fireWave=true;
+      } else {
+        fireWave=false;
+      }
+    } 
   }
 }
 
@@ -292,8 +318,6 @@ void checkLASER(float ang) {
   one.addAll(add);
 }
 
-
-
 void keyPressed() {
 
   if (key==CODED) {
@@ -320,7 +344,9 @@ void keyPressed() {
       keys.rightPressed();
     }
   }
-  if (key==' ') {
+  if (key=='n'){
+    newGame();
+  }else if (key==' ') {
     if (menu) {
       if (Menu.select==0) {
         newGame();
@@ -411,8 +437,10 @@ void keyReleased() {
 void newGame() {
   totalScore=0;
   score=0;
-  generateBonusTable();
+  
+  bonus.clear();
   setupAsteriods();
+  generateBonusTable();
   player = new ship(new PVector(width/2, height/2), -PI/2, 0);
   menu = false;
 }
@@ -423,8 +451,6 @@ void test() {
     print( " "+k+", ");
   }
   println();
-
-
   print("Level: "+level);
   println(" Asteriods Left: "+ one.size());
 }
