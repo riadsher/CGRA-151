@@ -19,7 +19,8 @@ class Bonus{
     timeCreated=millis();
     this.loc = loc;
     font =  loadFont("Stencil-100.vlw");
-    current = type[1];//Math.round(random(2))];
+    int bonus = Math.round(random(3))%3;
+    current = type[bonus];
   }
   
   void Draw(){

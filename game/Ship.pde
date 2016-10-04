@@ -51,7 +51,7 @@ class ship { //<>//
 
   Cluster DropBomb() {
     println("Cluster");
-    if ((millis()-lastFire)>100) {
+    if ((millis()-lastFire)>500) {
       PVector bultLoc = PVector.add(loc, PVector.fromAngle(ang).mult(25));
       ClusterBomb--;
       lastFire=millis();
@@ -62,7 +62,7 @@ class ship { //<>//
   }
 
   Wave FireWave() {
-    if ((millis()-lastFire)>100) {
+    if ((millis()-lastFire)>400) {
       PVector bultLoc = PVector.add(loc, PVector.fromAngle(ang).mult(25));
       Wave--;
       return new Wave(bultLoc, ang, 8.0);

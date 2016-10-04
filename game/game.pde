@@ -18,7 +18,7 @@ int level = 1;
 boolean PlayerDead = false;
 boolean fireWave = false;
 boolean menu = true;
-
+boolean LevelRun= false;
 
 void setup() {
   Menu= new Menu();
@@ -80,12 +80,12 @@ void draw() {
     for (bullet b : bullets) {
       if (!(b.type=='D')) {
         b.move();
-          b.Draw();
-      }else if(b.type=='D') {
+        b.Draw();
+      } else if (b.type=='D') {
         Wave temp = (Wave) b;
         print("fireWave: "+fireWave);
-         print(" index: "+temp.index+" ,temp size: "+temp.points.size());
-          println(" Dead: "+temp.DEAD);
+        print(" index: "+temp.index+" ,temp size: "+temp.points.size());
+        println(" Dead: "+temp.DEAD);
         if (fireWave) {
           print(" index: "+temp.index+" ,temp size: "+temp.points.size());
           println(" Dead: "+temp.DEAD);
@@ -106,14 +106,16 @@ void draw() {
   }
   if (menu) {
     Menu.DrawMenu();
-  }else if(PlayerDead){ 
-  Menu.PlayerDead();
-  }else if (one.isEmpty()) {
+  } else if (PlayerDead) { 
+    Menu.PlayerDead();
+  } else if (one.isEmpty()) {
 
     if (millis()-timer>2500) {
       level++;
+      bonus.clear();
       setupAsteriods();
       generateBonusTable();
+      LevelRun = false;
     }
 
     Menu.DrawScorePanel();
@@ -124,11 +126,9 @@ void draw() {
     Menu.DrawScorePanel();
     player.move();
     player.Draw();
-
-    
   }
-  if(player!=null)
-  contacts();
+  if (player!=null)
+    contacts();
 }
 
 void checkBonus() {
@@ -156,23 +156,25 @@ void contacts() {
 
   for (bullet a : bullets) {
     if (a.bounds()) {
+
       bulletRemove.add(a);
+      if (a.type=='D') {
+        fireWave = false;
+      }
     }
     for (asteriods p : one) {
-      //println("its gone");
+
       if (a.type=='D') {
-        //println("its gone");
+
         Wave temp = (Wave) a;
-        if(temp.DEAD){
-         println("its gone");
-         bulletRemove.add(a);
-      
-         
-         fireWave=false;
+        if (temp.DEAD) {
+          bulletRemove.add(a);
+
+          fireWave=false;
         }
         for (PVector point : temp.waveHit()) {
-           stroke(255,0,0);
-           point(point.x,point.y);
+          // stroke(255,0,0);
+          // point(point.x,point.y);
           if (!p.Dead&&p.getPolygon().contains(point.x, point.y)) {
             p.Dead=true;
             add.addAll(p.hit());
@@ -181,7 +183,7 @@ void contacts() {
           }
         }
       } else if (!p.Dead&&(!bulletRemove.contains(a))&&p.getPolygon().contains(a.loc.x, a.loc.y)) {
-        
+
         if (a.type=='S') {
           println("normal check");
           bulletRemove.add(a);
@@ -190,6 +192,7 @@ void contacts() {
           p.Dead=true;
           score=score +Math.round(p.size);
         } else if (a.type == 'W') {
+
           bulletRemove.add(a);
           Cluster temp = (Cluster) a;
           ArrayList<bullet> test = temp.blast();
@@ -231,12 +234,13 @@ void contacts() {
   one.removeAll(remove);
   one.addAll(add);
 
-  if (one.isEmpty()) {
+  if (!LevelRun && one.isEmpty()) {
     timer = millis();
     player.speed=new PVector(0, 0);
     player.loc= new PVector(width/2, height/2);
     player.ang=-PI/2;
     player.move();
+    LevelRun =true;
   }
 }
 
@@ -282,15 +286,17 @@ void checkKeys() {
     }
   }
   if (keys.D()) {
-    if (!fireWave) {
-      Wave temp = player.FireWave();
-      if (temp != null) {
-        bullets.add(temp );
-        fireWave=true;
-      } else {
-        fireWave=false;
+    if (player != null && player.Wave>0) {
+      if (!fireWave) {
+        Wave temp = player.FireWave();
+        if (temp != null) {
+          bullets.add(temp );
+          fireWave=true;
+        } else {
+          fireWave=false;
+        }
       }
-    } 
+    }
   }
 }
 
@@ -344,9 +350,9 @@ void keyPressed() {
       keys.rightPressed();
     }
   }
-  if (key=='n'){
+  if (key=='n') {
     newGame();
-  }else if (key==' ') {
+  } else if (key==' ') {
     if (menu) {
       if (Menu.select==0) {
         newGame();
@@ -435,9 +441,10 @@ void keyReleased() {
 }
 
 void newGame() {
+  level = 1;
   totalScore=0;
   score=0;
-  
+
   bonus.clear();
   setupAsteriods();
   generateBonusTable();
