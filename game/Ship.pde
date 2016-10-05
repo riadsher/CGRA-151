@@ -8,7 +8,7 @@ class ship { //<>//
 
 
   int lastFire=0;
-  int Wave = 1;
+  int Wave = 3;
   int laserBlast =5000;
   int ClusterBomb = 3;
 
@@ -62,7 +62,7 @@ class ship { //<>//
   }
 
   Wave FireWave() {
-    if ((millis()-lastFire)>400) {
+    if (Wave>0&&(millis()-lastFire)>400) {
       PVector bultLoc = PVector.add(loc, PVector.fromAngle(ang).mult(25));
       Wave--;
       return new Wave(bultLoc, ang, 8.0);

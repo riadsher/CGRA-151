@@ -71,9 +71,11 @@ void draw() {
 
   background(0);
   checkKeys();
-  for (Bonus b : bonus) {
-    b.Draw();
-    b.move();
+  if (!bonus.isEmpty()) {
+    for (Bonus b : bonus) {
+      b.Draw();
+      b.move();
+    }
   }
 
   if (!bullets.isEmpty()) {
@@ -403,6 +405,8 @@ void keyPressed() {
     for (asteriods o : one) {
       o.printdata();
     }
+  }else if(key=='o'){
+    PlayerDead= !PlayerDead;
   }
 }
 
@@ -449,6 +453,7 @@ void newGame() {
   setupAsteriods();
   generateBonusTable();
   player = new ship(new PVector(width/2, height/2), -PI/2, 0);
+  PlayerDead= false;
   menu = false;
 }
 
