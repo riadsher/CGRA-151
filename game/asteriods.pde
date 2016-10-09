@@ -4,28 +4,31 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 
 class asteriods {
-
+  // this loss accurace as teh asteriod moves but is used in the making of the asteriod.
   PVector center;
   PVector colour;
+
   PVector shape[];
+
   PVector speed = new PVector(0, 0);
+
   float size;
   float mag;
   float angle;
-  boolean Dead = false;
-  
-  void printdata(){
-    println("\nBeginning");
-   print("center: "+center+" Colour: "+colour+" speed: "+speed+ " size: "+size);
-   print(" Dead: "+Dead);
-   println();
-   println("Shape");
-   for(PVector s:shape){
-    print(" "+s+" ,");
-   }
-   
-  }
 
+  boolean Dead = false;
+  // for testing the asteriods 
+  void printdata() {
+    println("\nBeginning");
+    print("center: "+center+" Colour: "+colour+" speed: "+speed+ " size: "+size);
+    print(" Dead: "+Dead);
+    println();
+    println("Shape");
+    for (PVector s : shape) {
+      print(" "+s+" ,");
+    }
+  }
+  // constructer
   asteriods(float s, PVector center, float angle, float speed) {
     this.center = center;
     colour=new PVector(125, 125, 125);
@@ -34,9 +37,11 @@ class asteriods {
     chaSpeed(speed);
     turn(angle);
     defineShape();
-    colour=new PVector(random(50,255), random(50,255), random(50,255));
+    colour=new PVector(random(50, 255), random(50, 255), random(50, 255));
   }
-
+  // so this generates the 6 poitns of the asteroids and randomize them a bit
+  // i sure teh base code some were and used it but i can't rememeber were. but tehre was soem major changes
+  // in the orginal code to handle the random shape change
   void defineShape() {
 
     float R2 = Math.round(size/Math.sqrt(2));
@@ -101,22 +106,27 @@ class asteriods {
     noFill();
 
     beginShape();
+
     for (PVector p : shape) {
-      if(p.x<(-10000.00) ){
+      // this si the best tiem to check becasue randomly asteriods will jump that far out.
+      if (p.x<(-10000.00) ) {
         Dead= true;
-      }else if(p.y<(-10000.00) ){
+      } else if (p.y<(-10000.00) ) {
         Dead= true;
-      }else{
-      vertex(p.x, p.y);
-    }
+      } else {
+        vertex(p.x, p.y);
+      }
     }
     endShape(CLOSE);
   }
 
+
   void Move() {
     center.x =(center.x+speed.x);
     center.y =(center.y+speed.y);
-
+    // all of this is to check if the asteriod has moved over the screen edge i didn't 
+    //it this way because i wanted to use lots of different meathods also it seemed like 
+    //a good idea at teh time (may not have been)
     boolean over=false;
     boolean under = false;
     boolean xOver=false;
@@ -138,7 +148,7 @@ class asteriods {
       changeLocation(over, xOver);
     }
   }
-
+  // changing each point if any one of them is over the limits
   void changeLocation(boolean over, boolean xOver) {
     for (PVector p : shape) {
       if (over) {
@@ -164,7 +174,7 @@ class asteriods {
       }
     }
   }
-
+  // detecting a colliosn same as the ship one
   boolean Collison(Polygon2D other) {
 
     Polygon2D poly = getPolygon();
@@ -174,6 +184,7 @@ class asteriods {
     return !area.isEmpty();
   }
 
+  // same as teh ship but uses teh shape of the asteriod
   Polygon2D getPolygon() {
     Polygon2D poly = new Polygon2D(); 
     for (PVector p : shape) {
@@ -181,30 +192,29 @@ class asteriods {
     }
     return poly;
   }
-
+  // copied from the ship
   void turn(float angle) {
     this.angle = angle;
     //speed = PVector.fromAngle(ang).mult(mag);
   }
-
+  // copied from the ship
   void chaSpeed(float spe) {
     mag = spe;
     speed = PVector.add(speed, PVector.fromAngle(angle).mult(mag));
   }
-
+  // so this for if the asteriod has hit a bullet and needs to break into pieces
   ArrayList<asteriods> hit() {
     Rectangle2D bounds = getPolygon().getBounds2D();
     ArrayList<asteriods> babys  = new ArrayList<asteriods>();
     if (size>5) {
       for (int i =0; i< size/10; i++) {
-        if((size-5)<5){
-           babys.add(new asteriods(5, new PVector(random(Math.round(bounds.getMinX()), Math.round(bounds.getMaxX())),
-           random(Math.round(bounds.getMinY()), Math.round(bounds.getMaxY())) ), random(2*PI), random(mag, 2*mag)));
-        }else{
-          babys.add(new asteriods(size-5, new PVector(random(Math.round(bounds.getMinX()), Math.round(bounds.getMaxX())),
-          random(Math.round(bounds.getMinY()), Math.round(bounds.getMaxY())) ), random(2*PI), random(mag, 2*mag)));
+        if ((size-5)<5) {
+          babys.add(new asteriods(5, new PVector(random(Math.round(bounds.getMinX()), Math.round(bounds.getMaxX())), 
+            random(Math.round(bounds.getMinY()), Math.round(bounds.getMaxY())) ), random(2*PI), random(mag, 2*mag)));
+        } else {
+          babys.add(new asteriods(size-5, new PVector(random(Math.round(bounds.getMinX()), Math.round(bounds.getMaxX())), 
+            random(Math.round(bounds.getMinY()), Math.round(bounds.getMaxY())) ), random(2*PI), random(mag, 2*mag)));
         }
-          
       }
     }
 

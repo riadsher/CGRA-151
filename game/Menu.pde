@@ -1,26 +1,27 @@
 class Menu {
 
-  PFont Title;
-  String selected="game";
-  int select =0;
+  PFont Title; // teh font
+  String selected="game"; // what the selecter always starts on
+  int select =0; // what level we are in selection
   String selection[] = {"game", "score", "exit"};
   boolean Score = false;
+
 
   Menu() {
     Title = loadFont("Stencil-100.vlw");
   }
-  void DrawScorePanel(){
-    textFont(Title,50);
+
+  void DrawScorePanel() {
+    textFont(Title, 50);
     fill(255);
-    text("Level: "+level+" Score: "+score,width/2,50);
-    
+    text("Level: "+level+" Score: "+score, width/2, 50);
   }
-  
-  void NextLevel(){
-    
-    textFont(Title,50);
-    fill(255,255,153);
-    text("Flying to\nnext sector",width/2,height/2);
+
+  void NextLevel() {
+
+    textFont(Title, 50);
+    fill(255, 255, 153);
+    text("Flying to\nnext sector", width/2, height/2);
   }
 
 
@@ -52,29 +53,27 @@ class Menu {
       }
     }
   }
-  
-  void DrawScore(){
-    
-    
-    
-  }
-  
-  void PlayerDead(){
-    background(255);
-    textFont(Title,50);
-    fill(0,0,153);
-    text("You Are Dead\nHit N for\na new Game.",width/2,height/2);
+
+  // never did get tot this meathod envolves build files and so on so was not that interested in it
+  void DrawScore() {
   }
 
+  void PlayerDead() {
+    //background(255);
+    textFont(Title, 50);
+    fill(255, 255, 153);
+    text("You Are Dead\nHit N for\na new Game.", width/2, height/2);
+  }
+  // move the selecter down the menu
   void down() {
     select++;
-    selected=selection[select%3];
+    selected=selection[select%3]; // teh limit if you will so that it doesn't go beyound
   }
-
+  //move the selecter up the menu
   void up() {
     select--; 
     if (select<0)select=2;
-    
+
     selected=selection[select%3];
   }
 }
