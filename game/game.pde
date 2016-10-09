@@ -1,4 +1,4 @@
- //<>// //<>// //<>//
+ //<>//
 //list of multiply objects.
 
 ArrayList<asteriods> Asteriods = new ArrayList<asteriods>();
@@ -34,7 +34,8 @@ boolean LevelRun= false;
 
 void setup() {
   Menu= new Menu();
-  size(600, 600);
+  //size(600, 600);
+  fullScreen();
   setupAsteriods();
   generateBonusTable();
   bonus.add(new Bonus(new PVector(width/2, height/2))); 
